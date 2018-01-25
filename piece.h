@@ -7,8 +7,14 @@ class Piece {
     int variation;  // current rotation of piece
 
   public:
+    Piece(int k);
+    Piece(Piece &piece);
+
+    void copy(Piece &piece);
+
     Point getPosition();
     void setPosition(Point p);
+    void setPosition(int px, int py);
 
     int getKind();
     void setKind(int k);

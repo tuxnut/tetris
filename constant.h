@@ -1,22 +1,30 @@
+// UI
 const int WINDOW_HEIGHT = 480;
 const int WINDOW_WIDTH = 320;
+const int BOARD_POS_X = 20;
+const int BOARD_POS_Y = 20;
+
+// game constant
 const int BOARD_WIDTH = 10;
 const int BOARD_HEIGHT = 20;
 const int NB_PIECES = 7;
 const int NB_VARIATIONS = 4;
 const int SIZE_PIECE_SHAPE = 4;
-const int TILE_SIZE = 18; // pixel wise
+const int TILE_SIZE = 18;               // pixel wise
+const int INIT_PIECE_ON_BOARD_X = 0; 
+const int INIT_PIECE_ON_BOARD_Y = 5;
+const int INIT_PIECE_PIVOT_X = -1;
+const int INIT_PIECE_PIVOT_Y = -2;
+const int INIT_NEXT_PIECE_X = BOARD_WIDTH + 5; 
+const int INIT_NEXT_PIECE_Y = 5;
+const int BASE_WAIT_TIME = 700;         // in ms
+
 
 typedef struct Point {
     unsigned x, y;
 } Point;
 
 enum { O_SHAPE, I_SHAPE, S_SHAPE, Z_SHAPE, J_SHAPE, L_SHAPE, T_SHAPE };
-
-const int INIT_PIECE_ON_BOARD_X = 0; 
-const int INIT_PIECE_ON_BOARD_Y = 5;
-const int INIT_PIECE_PIVOT_X = 1;
-const int INIT_PIECE_PIVOT_Y = 2;
 
 int shape[NB_PIECES][NB_VARIATIONS][SIZE_PIECE_SHAPE][SIZE_PIECE_SHAPE] = {
     { // O_SHAPE
