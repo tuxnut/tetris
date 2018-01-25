@@ -6,4 +6,6 @@
 !*.h
 !*.gitignore
 !*.md
+
+!res/
 !res/tiles.png
