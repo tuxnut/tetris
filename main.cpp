@@ -1,31 +1,37 @@
-#include <SFML/Graphics.hpp>
-#include "./constant.h"
+#include <SDL2/SDL.h>
 #include <iostream>
 
 int main(int argc, char **argv) {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "My Window");
+    SDL_Window *window = NULL;
 
-    sf::Texture tex;
-    tex.loadFromFile("./res/tiles.png");
+    SDL_Surface *screenSurface = NULL;
 
-    sf::Sprite sprite(tex);
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+        std::cout << "Error while initializing of SDL" << std::endl;
+    } else {
+        window = SDL_CreateWindow("My Window", SDL_WINDOWPOS_UNDEFINED,
+                                  SDL_WINDOWPOS_UNDEFINED, 320, 480,
+                                  SDL_WINDOW_SHOWN);
 
-    while (window.isOpen()) {
-        sf::Event event;
+        if (window == NULL) {
+            std::cout << "Error while creating the window" << std::endl;
+        } else {
+            screenSurface = SDL_GetWindowSurface(window);
 
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
+            SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 255, 255, 255));
+
+            SDL_UpdateWindowSurface(window);
+
+            SDL_Delay(5000);
         }
-
-        window.clear();
-        window.draw(sprite);
-        window.display();
     }
+
+    SDL_DestroyWindow(window);
+
+    SDL_Quit();
 
     return 0;
 }
-
 
 ///******* Mes test *********///
 
