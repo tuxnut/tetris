@@ -18,6 +18,7 @@ const int INIT_PIECE_PIVOT_Y = -2;
 const int INIT_NEXT_PIECE_X = BOARD_WIDTH + 5; 
 const int INIT_NEXT_PIECE_Y = 5;
 const int BASE_WAIT_TIME = 700;         // in ms
+const int NB_COLORS = 9;
 
 
 typedef struct Point {

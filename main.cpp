@@ -18,11 +18,11 @@ int main(int argc, char **argv) {
         } else {
             screenSurface = SDL_GetWindowSurface(window);
 
-            SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 255, 255, 255));
+            SDL_FillRect(screenSurface, NULL, 0x00000000/* SDL_MapRGB(screenSurface->format, 126, 126, 126) */);
 
             SDL_UpdateWindowSurface(window);
 
-            SDL_Delay(5000);
+            SDL_Delay(1000);
         }
     }
 

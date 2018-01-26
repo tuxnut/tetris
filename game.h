@@ -1,7 +1,7 @@
 #include "./board.h"
 #include "./piece.h"
 #include <random>
-// #include "IO.h"
+#include "IO.h"
 
 class Game {
   private:
@@ -13,7 +13,7 @@ class Game {
 
     int getRand(int inf, int sup);
     void initGame();
-    void drawPiece();
+    void drawPiece(Piece &piece);
     void drawBoard();
 
   public:
