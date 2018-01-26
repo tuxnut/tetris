@@ -1,5 +1,6 @@
-#include <SDL2/SDL.h>
+#include <SDL2/SDL.h>									
 #include "./constant.h"
+#include <iostream>
 
 enum color { RED, GREEN, BLUE, YELLOW, MAGENTA, CYAN, GREY, BLACK, WHITE };
 
