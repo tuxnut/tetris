@@ -3,7 +3,7 @@
         "javascript": "node",
         "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
         "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
-        "cpp": "cd $dir && g++ -W -std=c++11 main.cpp game.cpp view.cpp model.cpp -lSDL2 -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "cpp": "cd $dir && g++ -W -std=c++11 main.cpp game.cpp view.cpp model.cpp piece.cpp -lsfml-graphics -lsfml-window -lsfml-system -o main && $dirmain",
         "objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
         "php": "php",
         "python": "python",
@@ -66,6 +66,8 @@
         "tuple": "cpp",
         "type_traits": "cpp",
         "typeinfo": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "atomic": "cpp",
+        "cstddef": "cpp"
     }
 }
