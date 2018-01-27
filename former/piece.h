@@ -7,6 +7,7 @@ class Piece {
     int variation;  // current rotation of piece
 
   public:
+    Piece();
     Piece(int k);
     Piece(Piece &piece);
 

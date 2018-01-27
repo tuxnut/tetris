@@ -1,5 +1,7 @@
 #include "./piece.h"
 
+Piece::Piece() { }
+
 Piece::Piece(int k) {
     kind = k;
     variation = 0;
