@@ -11,12 +11,16 @@ class Game {
     Model *model;
     Piece *currPiece;
     Piece *nextPiece;
+    int **board;
 
     public:
     Game(Model *m, View &v);
     static int GetRandom(int inf, int sup);
     void launch();
     void setupNextPiece();
+    void computePieceOnBoard();
+    bool canRotate();
+    bool canMoveLeft();
 };
 
 #endif

@@ -18,9 +18,7 @@ Piece::Piece(int x, int y) {
 }
 
 void Piece::copy(Piece &piece) {
-    std::cout << __LINE__ << std::endl;
     px = piece.getX();
-    std::cout << __LINE__ << std::endl;
     py = piece.getY();
     kind = piece.getKind();
     variation = piece.getVariation();

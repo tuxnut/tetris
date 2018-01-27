@@ -20,6 +20,9 @@ void View::drawTile(int px, int py, enum Tile color) {
 }
 
 void View::drawPiece(Piece &piece) {
+    // The pieces hold their position in the board
+    // Convert from place in board to real pixel ! 
+
     int px = piece.getX();
     int py = piece.getY();
     int kind = piece.getKind();
@@ -32,5 +35,16 @@ void View::drawPiece(Piece &piece) {
                 drawTile(px + i * TILE_SIZE, py + j* TILE_SIZE, color);
             }
         }
+    }
+}
+
+void View::drawBoard() {
+    for(unsigned i = 0; i < BOARD_WIDTH + 2; i++) {
+        drawTile((BOARD_X - TILE_SIZE) + i * TILE_SIZE, BOARD_Y - TILE_SIZE, BLACK);
+        drawTile((BOARD_X - TILE_SIZE) + i * TILE_SIZE, BOARD_Y + BOARD_HEIGHT * TILE_SIZE, BLACK);
+    }
+    for(unsigned i = 0; i < BOARD_HEIGHT; i++) {
+        drawTile((BOARD_X - TILE_SIZE), BOARD_Y + i * TILE_SIZE, BLACK);
+        drawTile((BOARD_X + BOARD_WIDTH * TILE_SIZE), BOARD_Y + i * TILE_SIZE, BLACK);
     }
 }

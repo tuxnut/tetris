@@ -57,7 +57,7 @@ void Board::deletePossibleLines() {
 }
 
 bool Board::isPositionFree(int posX, int posY) {
-    return (mBoard[posX][posY] == FREE) ? true : false;
+    return (mBoard[posX][posY] == FREE);
 }
 
 bool Board::isMovementPossible(int posX, int posY) {

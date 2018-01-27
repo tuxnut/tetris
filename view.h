@@ -23,6 +23,7 @@ class View {
     sf::RenderWindow *createWindow();
     void drawTile(int px, int py, enum Tile color);
     void drawPiece(Piece &piece);
+    void drawBoard();
 };
 
 #endif
