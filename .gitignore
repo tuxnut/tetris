@@ -11,3 +11,5 @@
 !res/*
 !former/
 !former/*
+
+!.vscode/settings.json
