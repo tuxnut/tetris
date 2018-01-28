@@ -9,16 +9,19 @@
 #define SIZE_PIECE_SHAPE 4
 #define BOARD_WIDTH 10
 #define BOARD_HEIGHT 20
-#define NEXTPIECE_X 250
-#define NEXTPIECE_Y 400
+#define NEXTPIECE_X 12
+#define NEXTPIECE_Y 15
 #define BOARD_X 20
 #define BOARD_Y 20
+#define PIECE_OFFSET_X -2
+#define PIECE_OFFSET_Y -1
+#define BOARD_FREE 255
 
 enum Tile { D_BLUE, PURPLE, RED, GREEN, YELLOW, L_BLUE, ORANGE, BLACK };
 
 enum Shape { O_SHAPE, I_SHAPE, S_SHAPE, Z_SHAPE, J_SHAPE, L_SHAPE, T_SHAPE };
 
-static int TileToInt(enum Tile color) {
+inline static int TileToInt(enum Tile color) {
     switch (color)
     {
     D_BLUE:
@@ -38,7 +41,7 @@ static int TileToInt(enum Tile color) {
     }
 }
 
-static enum Tile IntToTile(int color) {
+inline static enum Tile IntToTile(int color) {
     switch (color)
     {
     D_BLUE:

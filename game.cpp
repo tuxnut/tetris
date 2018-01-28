@@ -17,7 +17,7 @@ Game::Game(Model *m, View &v) : view(v) {
 
     for (unsigned i = 0; i < BOARD_WIDTH; i++)
         for (unsigned j = 0; j < BOARD_HEIGHT; j++)
-            board[i][j] = 0;
+            board[i][j] = BOARD_FREE;
 }
 
 int Game::GetRandom(int inf, int sup) { return rand() % (sup - inf + 1) + inf; }
@@ -27,8 +27,11 @@ void Game::launch() {
 
     setupNextPiece();
     sf::RenderWindow *window = view.createWindow();
+    sf::Clock timer;
 
     while (window->isOpen()) {
+
+        std::cout << timer.restart().asMicroseconds() << std::endl;
 
         sf::Event event;
         while (window->pollEvent(event)) {
@@ -46,11 +49,10 @@ void Game::launch() {
                 }
         }
         window->clear(sf::Color::White);
-        // computePieceOnBoard();
-        view.drawBoard();
+        view.drawBoard(board);
 
-        // drawTile(10, 10, ORANGE);
         view.drawPiece(*currPiece);
+        view.drawPiece(*nextPiece);
         window->display();
     }
 }
@@ -58,11 +60,13 @@ void Game::launch() {
 void Game::setupNextPiece() {
     // change nextPiece to currPiece
     currPiece->copy(*nextPiece);
-    currPiece->setX(BOARD_X + (BOARD_WIDTH / 2) * TILE_SIZE);
-    currPiece->setY(BOARD_Y);
+    currPiece->setX(BOARD_WIDTH / 2 + PIECE_OFFSET_X);
+    currPiece->setY(PIECE_OFFSET_Y);
 
     // get a new nextPiece
     nextPiece = new Piece();
+    nextPiece->setX(NEXTPIECE_X);
+    nextPiece->setY(NEXTPIECE_Y);
 }
 
 void Game::computePieceOnBoard() {
