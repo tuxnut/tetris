@@ -5,7 +5,9 @@
 Game::Game(Model *m, View &v) : view(v) {
     model = m;
     view.setControler(this, m);
+
     srand((unsigned)time(NULL));
+    
     currPiece = new Piece();
     nextPiece = new Piece();
     nextPiece->setX(NEXTPIECE_X);
@@ -18,8 +20,10 @@ Game::Game(Model *m, View &v) : view(v) {
     for (unsigned i = 0; i < BOARD_WIDTH; i++)
         for (unsigned j = 0; j < BOARD_HEIGHT; j++)
             board[i][j] = BOARD_FREE;
-
-    // board[BOARD_WIDTH - 1][BOARD_HEIGHT - 1] = 2;
+    
+    score = 0;
+    nbLines = 0;
+    level = 0;
 }
 
 int Game::GetRandom(int inf, int sup) { return rand() % (sup - inf + 1) + inf; }
@@ -60,17 +64,18 @@ void Game::launch() {
         }
 
         auto elapsed = timer.getElapsedTime().asMilliseconds();
-        if(elapsed > WAIT_TIME) {
-            if(canMoveDown()) {
+        if (elapsed > WAIT_TIME) {
+            if (canMoveDown()) {
                 currPiece->moveDown();
             } else {
-                // store piece in board
+                storePieceOnBoard();
 
-                // delete lines
+                deleteLine();
 
-                // is game over
+                if(isGameOver())
+                    return;
 
-                // create new piece
+                setupNextPiece();
             }
             timer.restart();
         }
@@ -88,18 +93,63 @@ void Game::setupNextPiece() {
     nextPiece->setX(NEXTPIECE_X);
     nextPiece->setY(NEXTPIECE_Y);
 }
-/*
-void Game::computePieceOnBoard() {
+
+void Game::storePieceOnBoard() {
     int px = currPiece->getX();
     int py = currPiece->getY();
     int kind = currPiece->getKind();
     int variation = currPiece->getVariation();
+    int color = TileToInt(currPiece->getColor());
 
-    for (int x = px, i = 0; x < px + SIZE_PIECE_SHAPE; x++, i++)
-        for (int y = py, j = 0; y < py + SIZE_PIECE_SHAPE; y++, j++)
-            board[x][y] = (shape[kind][variation][i][j] != 0) ? 1 : board[x][y];
+    for (int x = 0; x < SIZE_PIECE_SHAPE; x++)
+        for (int y = 0; y < SIZE_PIECE_SHAPE; y++)
+            if (shape[kind][variation][y][x] != 0)
+                board[px + x][py + y] = color;
 }
- */
+
+void Game::deleteLine() {
+    int nbLine = 0;
+
+    for (int y = 0; y < BOARD_HEIGHT; y++) {
+
+        int x = 0;
+        while (x < BOARD_WIDTH) {
+            if (board[x][y] == BOARD_FREE)
+                break;
+            x++;
+        }
+
+        if (x == BOARD_WIDTH) {
+            for (int j = y; j > 0; j--)
+                for (int i = 0; i < BOARD_WIDTH; i++)
+                    board[i][j] = board[i][j - 1];
+            nbLine++;
+        }
+    }
+
+    increaseScore(nbLine);
+}
+
+void Game::increaseScore(int line) {
+    switch(line) {
+        case 1:
+            score += (level + 1) * 40;
+            break;
+        case 2:
+            score += (level + 1) * 100;
+            break;
+        case 3:
+            score += (level + 1) * 300;
+            break;
+        default:
+            score += (level + 1) * 1200;
+            break;
+    }
+}
+
+void Game::increaseLevel() {
+    level = (level == MAX_LEVEL) ? level : level + 1;
+}
 
 bool Game::canRotate() {
     int px = currPiece->getX();
@@ -159,4 +209,12 @@ bool Game::canMoveDown() {
                 return false;
 
     return true;
+}
+
+bool Game::isGameOver() {
+    for(unsigned i = 0; i < SIZE_PIECE_SHAPE; i++)
+        if(board[i][0] != BOARD_FREE)
+            return true;
+
+    return false;
 }
