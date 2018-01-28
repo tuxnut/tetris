@@ -7,7 +7,7 @@ Game::Game(Model *m, View &v) : view(v) {
     view.setControler(this, m);
 
     srand((unsigned)time(NULL));
-    
+
     currPiece = new Piece();
     nextPiece = new Piece();
     nextPiece->setX(NEXTPIECE_X);
@@ -20,7 +20,7 @@ Game::Game(Model *m, View &v) : view(v) {
     for (unsigned i = 0; i < BOARD_WIDTH; i++)
         for (unsigned j = 0; j < BOARD_HEIGHT; j++)
             board[i][j] = BOARD_FREE;
-    
+
     score = 0;
     nbLines = 0;
     level = 0;
@@ -72,7 +72,7 @@ void Game::launch() {
 
                 deleteLine();
 
-                if(isGameOver())
+                if (isGameOver())
                     return;
 
                 setupNextPiece();
@@ -131,25 +131,28 @@ void Game::deleteLine() {
 }
 
 void Game::increaseScore(int line) {
-    switch(line) {
-        case 1:
-            score += (level + 1) * 40;
-            break;
-        case 2:
-            score += (level + 1) * 100;
-            break;
-        case 3:
-            score += (level + 1) * 300;
-            break;
-        default:
-            score += (level + 1) * 1200;
-            break;
+    switch (line) {
+    case 1:
+        score += (level + 1) * 40;
+        break;
+    case 2:
+        score += (level + 1) * 100;
+        break;
+    case 3:
+        score += (level + 1) * 300;
+        break;
+    default:
+        score += (level + 1) * 1200;
+        break;
     }
+    
+    if((nbLines % 10) > ((nbLines + line) % 10))
+        increaseLevel();
+    
+    nbLines += line;
 }
 
-void Game::increaseLevel() {
-    level = (level == MAX_LEVEL) ? level : level + 1;
-}
+void Game::increaseLevel() { level = (level == MAX_LEVEL) ? level : level + 1; }
 
 bool Game::canRotate() {
     int px = currPiece->getX();
@@ -212,8 +215,8 @@ bool Game::canMoveDown() {
 }
 
 bool Game::isGameOver() {
-    for(unsigned i = 0; i < SIZE_PIECE_SHAPE; i++)
-        if(board[i][0] != BOARD_FREE)
+    for (unsigned i = 0; i < SIZE_PIECE_SHAPE; i++)
+        if (board[i][0] != BOARD_FREE)
             return true;
 
     return false;
