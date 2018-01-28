@@ -21,6 +21,8 @@ class Game {
     void computePieceOnBoard();
     bool canRotate();
     bool canMoveLeft();
+    bool canMoveRight();
+    bool canMoveDown();
 };
 
 #endif

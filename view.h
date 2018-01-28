@@ -3,7 +3,6 @@
 
 #include "./constant.h"
 #include "./piece.h"
-#include <iostream>
 // #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 

@@ -1,6 +1,8 @@
 #ifndef CONSTANT_H
 #define CONSTANT_H
 
+#include <iostream>
+
 #define WINDOW_HEIGHT 480
 #define WINDOW_WIDTH 320
 #define TILE_SIZE 18
@@ -16,6 +18,7 @@
 #define PIECE_OFFSET_X -2
 #define PIECE_OFFSET_Y -1
 #define BOARD_FREE 255
+#define WAIT_TIME 700
 
 enum Tile { D_BLUE, PURPLE, RED, GREEN, YELLOW, L_BLUE, ORANGE, BLACK };
 
@@ -101,16 +104,16 @@ const int shape[NB_PIECES][NB_VARIATIONS][SIZE_PIECE_SHAPE][SIZE_PIECE_SHAPE] = 
             {0,0,1,0}
         },
         {
-            {0,0,1,0},
-            {0,0,2,0},
-            {0,0,1,0},
-            {0,0,1,0}
-        },
-        {
             {0,0,0,0},
             {1,1,2,1},
             {0,0,0,0},
             {0,0,0,0}
+        },
+        {
+            {0,0,1,0},
+            {0,0,2,0},
+            {0,0,1,0},
+            {0,0,1,0}
         }
     },
     { // S_SHAPE
@@ -245,4 +248,12 @@ const int shape[NB_PIECES][NB_VARIATIONS][SIZE_PIECE_SHAPE][SIZE_PIECE_SHAPE] = 
     }
 };
 
+static void DisplayShape(int k, int v) {
+    for(unsigned i = 0; i < SIZE_PIECE_SHAPE; i++) {
+        for(unsigned j = 0; j < SIZE_PIECE_SHAPE; j++) {
+            std::cout << shape[k][v][i][j] << "\t";
+        }
+        std::cout << std::endl;
+    }
+}
 #endif

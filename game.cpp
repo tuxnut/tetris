@@ -18,20 +18,26 @@ Game::Game(Model *m, View &v) : view(v) {
     for (unsigned i = 0; i < BOARD_WIDTH; i++)
         for (unsigned j = 0; j < BOARD_HEIGHT; j++)
             board[i][j] = BOARD_FREE;
+
+    // board[BOARD_WIDTH - 1][BOARD_HEIGHT - 1] = 2;
 }
 
 int Game::GetRandom(int inf, int sup) { return rand() % (sup - inf + 1) + inf; }
 
 void Game::launch() {
     model->loadTiles();
+    int ofepzfzea = 0;
 
     setupNextPiece();
     sf::RenderWindow *window = view.createWindow();
     sf::Clock timer;
 
     while (window->isOpen()) {
-
-        std::cout << timer.restart().asMicroseconds() << std::endl;
+        window->clear(sf::Color::White);
+        view.drawBoard(board);
+        view.drawPiece(*currPiece);
+        view.drawPiece(*nextPiece);
+        window->display();
 
         sf::Event event;
         while (window->pollEvent(event)) {
@@ -39,21 +45,35 @@ void Game::launch() {
                 window->close();
 
             if (event.type == sf::Event::KeyPressed)
-                if (event.key.code == sf::Keyboard::Return /* && canRotate() */) {
+                if (event.key.code == sf::Keyboard::Return && canRotate()) {
                     currPiece->rotate();
-                } else if (event.key.code == sf::Keyboard::Left /* &&
-                           canMoveLeft() */) {
+                } else if (event.key.code == sf::Keyboard::Left &&
+                           canMoveLeft()) {
                     currPiece->moveLeft();
-                } else if (event.key.code == sf::Keyboard::Right) {
+                } else if (event.key.code == sf::Keyboard::Right &&
+                           canMoveRight()) {
                     currPiece->moveRight();
+                } else if (event.key.code == sf::Keyboard::Down &&
+                           canMoveDown()) {
+                    currPiece->moveDown();
                 }
         }
-        window->clear(sf::Color::White);
-        view.drawBoard(board);
 
-        view.drawPiece(*currPiece);
-        view.drawPiece(*nextPiece);
-        window->display();
+        auto elapsed = timer.getElapsedTime().asMilliseconds();
+        if(elapsed > WAIT_TIME) {
+            timer.restart();
+            if(canMoveDown()) {
+                currPiece->moveDown();
+            } else {
+                // store piece in board
+
+                // delete lines
+
+                // is game over
+
+                // create new piece
+            }
+        }
     }
 }
 
@@ -68,7 +88,7 @@ void Game::setupNextPiece() {
     nextPiece->setX(NEXTPIECE_X);
     nextPiece->setY(NEXTPIECE_Y);
 }
-
+/*
 void Game::computePieceOnBoard() {
     int px = currPiece->getX();
     int py = currPiece->getY();
@@ -79,24 +99,21 @@ void Game::computePieceOnBoard() {
         for (int y = py, j = 0; y < py + SIZE_PIECE_SHAPE; y++, j++)
             board[x][y] = (shape[kind][variation][i][j] != 0) ? 1 : board[x][y];
 }
+ */
 
 bool Game::canRotate() {
     int px = currPiece->getX();
     int py = currPiece->getY();
     int kind = currPiece->getKind();
-    int rotation = (currPiece->getVariation() == NB_VARIATIONS - 1)
-                       ? 0
-                       : currPiece->getVariation();
+    int variation = (currPiece->getVariation() + 1) % NB_VARIATIONS;
 
-    for (unsigned i = 0; i < SIZE_PIECE_SHAPE; i++) {
-        for (unsigned j = 0; j < SIZE_PIECE_SHAPE; j++) {
-            if (shape[kind][rotation][i][j] != 0 && board[px + i][py + j]) {
-                // if(px + ) {
+    for (int x = 0; x < SIZE_PIECE_SHAPE; x++)
+        for (int y = 0; y < SIZE_PIECE_SHAPE; y++)
+            if (shape[kind][variation][y][x] != 0 &&
+                (px + x < 0 || px + x >= BOARD_WIDTH || py + y >= BOARD_HEIGHT))
+                return false;
 
-                // }
-            }
-        }
-    }
+    return true;
 }
 
 bool Game::canMoveLeft() {
@@ -105,18 +122,41 @@ bool Game::canMoveLeft() {
     int kind = currPiece->getKind();
     int variation = currPiece->getVariation();
 
-    for (int x = px, i = 0; x < px + SIZE_PIECE_SHAPE; x++, i++) {
-        for (int y = py, j = 0; y < py + SIZE_PIECE_SHAPE; y++, j++) {
-            // check if outside the board
-            if (x < 0 && shape[kind][variation][i][j] != 0)
+    for (int x = 0; x < SIZE_PIECE_SHAPE; x++)
+        for (int y = 0; y < SIZE_PIECE_SHAPE; y++)
+            if (shape[kind][variation][y][x] != 0 &&
+                (px + x < 0 || board[px + x][py + y] != BOARD_FREE))
                 return false;
 
-            // check collision with other pieces
-            if (y >= 0)
-                if (shape[kind][variation][i][j] != 0 && board[x][y] != 0)
-                    return false;
-        }
-    }
+    return true;
+}
+
+bool Game::canMoveRight() {
+    int px = currPiece->getX() + 1;
+    int py = currPiece->getY();
+    int kind = currPiece->getKind();
+    int variation = currPiece->getVariation();
+
+    for (int x = 0; x < SIZE_PIECE_SHAPE; x++)
+        for (int y = 0; y < SIZE_PIECE_SHAPE; y++)
+            if (shape[kind][variation][y][x] != 0 &&
+                (px + x >= BOARD_WIDTH || board[px + x][py + y] != BOARD_FREE))
+                return false;
+
+    return true;
+}
+
+bool Game::canMoveDown() {
+    int px = currPiece->getX();
+    int py = currPiece->getY() + 1;
+    int kind = currPiece->getKind();
+    int variation = currPiece->getVariation();
+
+    for (int x = 0; x < SIZE_PIECE_SHAPE; x++)
+        for (int y = 0; y < SIZE_PIECE_SHAPE; y++)
+            if (shape[kind][variation][y][x] != 0 &&
+                (py + y >= BOARD_HEIGHT || board[px + x][py + y] != BOARD_FREE))
+                return false;
 
     return true;
 }
