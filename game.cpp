@@ -61,7 +61,6 @@ void Game::launch() {
 
         auto elapsed = timer.getElapsedTime().asMilliseconds();
         if(elapsed > WAIT_TIME) {
-            timer.restart();
             if(canMoveDown()) {
                 currPiece->moveDown();
             } else {
@@ -73,6 +72,7 @@ void Game::launch() {
 
                 // create new piece
             }
+            timer.restart();
         }
     }
 }
