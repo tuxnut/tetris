@@ -64,4 +64,12 @@ void View::drawBoard(int **board) {
         for(unsigned j = 0; j < BOARD_HEIGHT; j++)
             if (board[i][j] != BOARD_FREE)
                 drawTile(BOARD_X + i* TILE_SIZE, BOARD_Y + j * TILE_SIZE, IntToTile(board[i][j]));
+
+    drawText(TEXT_SCORE_X, TEXT_SCORE_Y, "SCORE");
+    drawText(TEXT_SCORE_X + 20, TEXT_SCORE_Y + 20, std::to_string(controler->getScore()));
+    drawText(TEXT_LEVEL_X, TEXT_LEVEL_Y, "LEVEL");
+    drawText(TEXT_LEVEL_X + 20, TEXT_LEVEL_Y + 20, std::to_string(controler->getLevel()));
+    drawText(TEXT_LINE_X, TEXT_LINE_Y, "LINES");
+    drawText(TEXT_LINE_X + 20, TEXT_LINE_Y + 20, std::to_string(controler->getLines()));
+    drawText(TEXT_NEXT_X, TEXT_NEXT_Y, "NEXT");
 }

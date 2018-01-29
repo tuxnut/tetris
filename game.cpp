@@ -13,6 +13,8 @@ Game::Game(Model *m, View &v) : view(v) {
     nextPiece->setX(NEXTPIECE_X);
     nextPiece->setY(NEXTPIECE_Y);
 
+    model->loadMusic(&music);
+
     board = (int **)malloc(BOARD_WIDTH * sizeof(int *));
     for (unsigned i = 0; i < BOARD_WIDTH; i++)
         board[i] = (int *)malloc(BOARD_HEIGHT * sizeof(int));
@@ -28,9 +30,26 @@ Game::Game(Model *m, View &v) : view(v) {
 
 int Game::GetRandom(int inf, int sup) { return rand() % (sup - inf + 1) + inf; }
 
+int Game::getScore() {
+    return score;
+}
+
+int Game::getLines() {
+    return nbLines;
+}
+
+int Game::getLevel() {
+    return level;
+}
+
+int Game::getNbPiece() {
+    return nbPiece;
+}
+
 void Game::launch() {
     model->loadTiles();
-    int ofepzfzea = 0;
+    music.setLoop(true);
+    music.play();
 
     setupNextPiece();
     sf::RenderWindow *window = view.createWindow();
@@ -41,9 +60,6 @@ void Game::launch() {
         view.drawBoard(board);
         view.drawPiece(*currPiece);
         view.drawPiece(*nextPiece);
-        view.drawText(TEXT_SCORE_X, TEXT_SCORE_Y, "SCORE");
-        view.drawText(TEXT_LEVEL_X, TEXT_LEVEL_Y, "LEVEL");
-        view.drawText(TEXT_LINE_X, TEXT_LINE_Y, "LINES");
         window->display();
 
         sf::Event event;
@@ -108,6 +124,8 @@ void Game::storePieceOnBoard() {
         for (int y = 0; y < SIZE_PIECE_SHAPE; y++)
             if (shape[kind][variation][y][x] != 0)
                 board[px + x][py + y] = color;
+    
+    nbPiece++;
 }
 
 void Game::deleteLine() {
@@ -144,7 +162,7 @@ void Game::increaseScore(int line) {
     case 3:
         score += (level + 1) * 300;
         break;
-    default:
+    case 4:
         score += (level + 1) * 1200;
         break;
     }

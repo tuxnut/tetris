@@ -3,11 +3,11 @@
 
 #include "./constant.h"
 #include "./piece.h"
+#include "./game.h"
 // #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <string>
 
-class Game;
 class Model;
 
 class View {

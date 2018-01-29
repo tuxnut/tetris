@@ -4,6 +4,23 @@ void Model::loadTiles() {
     tiles.loadFromFile("./res/tiles.png");
 }
 
+void Model::loadMusic(sf::Music *music) {
+    if (!music->openFromFile("./res/tetris.ogg"))
+        std::cout << "Could not open music file" << std::endl;
+}
+
+sf::SoundBuffer Model::loadSound(enum Sound sound) {
+    sf::SoundBuffer sb;
+    switch (sound)
+    {
+    case PIECE_FALLEN:
+        sb.loadFromFile("./res/fall.ogg");
+        break;
+    }
+
+    return sb;
+}
+
 sf::Texture Model::getTiles() {
     return tiles;
 }
