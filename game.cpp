@@ -41,6 +41,9 @@ void Game::launch() {
         view.drawBoard(board);
         view.drawPiece(*currPiece);
         view.drawPiece(*nextPiece);
+        view.drawText(TEXT_SCORE_X, TEXT_SCORE_Y, "SCORE");
+        view.drawText(TEXT_LEVEL_X, TEXT_LEVEL_Y, "LEVEL");
+        view.drawText(TEXT_LINE_X, TEXT_LINE_Y, "LINES");
         window->display();
 
         sf::Event event;

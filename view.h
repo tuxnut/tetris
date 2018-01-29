@@ -5,6 +5,7 @@
 #include "./piece.h"
 // #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <string>
 
 class Game;
 class Model;
@@ -14,6 +15,7 @@ class View {
     // SDL_Window *window;
     // SDL_Surface *screen;
     sf::RenderWindow *window;
+    sf::Font font;
     Game *controler;
     Model *model;
 
@@ -22,6 +24,7 @@ class View {
     sf::RenderWindow *createWindow();
     void drawTile(int px, int py, enum Tile color);
     void drawPiece(Piece &piece);
+    void drawText(int px, int py, std::string text);
     void drawBoard(int **board);
 };
 

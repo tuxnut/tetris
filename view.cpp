@@ -8,7 +8,7 @@ void View::setControler(Game *game, Model *m) {
 
 sf::RenderWindow *View::createWindow() {
     window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tetris");
-
+    font.loadFromFile("./res/Roboto-Regular.ttf");
     return window;
 }
 
@@ -37,6 +37,17 @@ void View::drawPiece(Piece &piece) {
             }
         }
     }
+}
+
+void View::drawText(int px, int py, std::string text) {
+    sf::Text t;
+
+    t.setFont(font);
+    t.setString(text);
+    t.setPosition(px, py);
+    t.setCharacterSize(14);
+    t.setColor(sf::Color::Black);
+    window->draw(t);
 }
 
 void View::drawBoard(int **board) {

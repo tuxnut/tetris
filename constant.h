@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-#define WINDOW_HEIGHT 480
-#define WINDOW_WIDTH 320
+#define WINDOW_HEIGHT 400
+#define WINDOW_WIDTH 344
 #define TILE_SIZE 18
 #define NB_PIECES 7
 #define NB_VARIATIONS 4
@@ -20,6 +20,12 @@
 #define BOARD_FREE 255
 #define WAIT_TIME 700
 #define MAX_LEVEL 10
+#define TEXT_SCORE_X 263
+#define TEXT_SCORE_Y 30
+#define TEXT_LEVEL_X 263
+#define TEXT_LEVEL_Y 100
+#define TEXT_LINE_X 263
+#define TEXT_LINE_Y 170
 
 enum Tile { D_BLUE, PURPLE, RED, GREEN, YELLOW, L_BLUE, ORANGE, BLACK };
 
