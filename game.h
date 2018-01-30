@@ -13,6 +13,8 @@ class Game {
     Piece *currPiece;
     Piece *nextPiece;
     sf::Music music;
+    sf::Sound sound;
+    std::vector<sf::SoundBuffer> buffers;
     int **board;
     int score;
     int nbLines;
@@ -32,6 +34,8 @@ class Game {
     void deleteLine();
     void increaseScore(int line);
     void increaseLevel();
+    void loadSound();
+    void playSound(enum Sound sound);
     bool canRotate();
     bool canMoveLeft();
     bool canMoveRight();

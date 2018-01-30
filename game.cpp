@@ -13,7 +13,8 @@ Game::Game(Model *m, View &v) : view(v) {
     nextPiece->setX(NEXTPIECE_X);
     nextPiece->setY(NEXTPIECE_Y);
 
-    model->loadMusic(&music);
+    model->loadMusic(&music, MUSIC_A);
+    loadSound();
 
     board = (int **)malloc(BOARD_WIDTH * sizeof(int *));
     for (unsigned i = 0; i < BOARD_WIDTH; i++)
@@ -30,21 +31,13 @@ Game::Game(Model *m, View &v) : view(v) {
 
 int Game::GetRandom(int inf, int sup) { return rand() % (sup - inf + 1) + inf; }
 
-int Game::getScore() {
-    return score;
-}
+int Game::getScore() { return score; }
 
-int Game::getLines() {
-    return nbLines;
-}
+int Game::getLines() { return nbLines; }
 
-int Game::getLevel() {
-    return level;
-}
+int Game::getLevel() { return level; }
 
-int Game::getNbPiece() {
-    return nbPiece;
-}
+int Game::getNbPiece() { return nbPiece; }
 
 void Game::launch() {
     model->loadTiles();
@@ -69,6 +62,7 @@ void Game::launch() {
 
             if (event.type == sf::Event::KeyPressed)
                 if (event.key.code == sf::Keyboard::Return && canRotate()) {
+                    playSound(ROTATE);
                     currPiece->rotate();
                 } else if (event.key.code == sf::Keyboard::Left &&
                            canMoveLeft()) {
@@ -87,12 +81,16 @@ void Game::launch() {
             if (canMoveDown()) {
                 currPiece->moveDown();
             } else {
+                playSound(PIECE_FALLEN);
                 storePieceOnBoard();
 
                 deleteLine();
 
-                if (isGameOver())
+                if (isGameOver()) {
+                    playSound(GATE_CLOSE);
+                    playSound(GAMEOVER);
                     return;
+                }
 
                 setupNextPiece();
             }
@@ -124,7 +122,7 @@ void Game::storePieceOnBoard() {
         for (int y = 0; y < SIZE_PIECE_SHAPE; y++)
             if (shape[kind][variation][y][x] != 0)
                 board[px + x][py + y] = color;
-    
+
     nbPiece++;
 }
 
@@ -147,6 +145,11 @@ void Game::deleteLine() {
             nbLine++;
         }
     }
+    if (nbLines >= 4) {
+        playSound(TETRIS);
+    } else if (nbLines > 0) {
+        playSound(DELETE_LINE);
+    }
 
     increaseScore(nbLine);
 }
@@ -166,14 +169,44 @@ void Game::increaseScore(int line) {
         score += (level + 1) * 1200;
         break;
     }
-    
-    if((nbLines % 10) > ((nbLines + line) % 10))
+
+    if ((nbLines % 10) > ((nbLines + line) % 10))
         increaseLevel();
-    
+
     nbLines += line;
 }
 
-void Game::increaseLevel() { level = (level == MAX_LEVEL) ? level : level + 1; }
+void Game::increaseLevel() { 
+    level = (level == MAX_LEVEL) ? level : level + 1;
+    playSound(LEVELUP);
+}
+
+void Game::loadSound() {
+    sf::SoundBuffer sb;
+    sb = model->loadSound(DELETE_LINE);
+    buffers.push_back(sb);
+    sb = model->loadSound(ROTATE);
+    buffers.push_back(sb);
+    sb = model->loadSound(TETRIS);
+    buffers.push_back(sb);
+    sb = model->loadSound(GATE_CLOSE);
+    buffers.push_back(sb);
+    sb = model->loadSound(GAMEOVER);
+    buffers.push_back(sb);
+    sb = model->loadSound(PIECE_FALLEN);
+    buffers.push_back(sb);
+    sb = model->loadSound(LEVELUP);
+    buffers.push_back(sb);
+}
+
+void Game::playSound(enum Sound s) {
+    // while(sound.getStatus() == sf::Sound::Playing) {
+    //     sound.
+    //  }
+    std::cout << s << std::endl;
+    sound.setBuffer(buffers[s]);
+    sound.play();
+}
 
 bool Game::canRotate() {
     int px = currPiece->getX();

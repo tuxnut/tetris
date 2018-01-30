@@ -11,7 +11,7 @@ class Model {
     public:    
     // Model();
     void loadTiles();
-    void loadMusic(sf::Music *music);
+    void loadMusic(sf::Music *music, enum Music m);
     sf::SoundBuffer loadSound(enum Sound sound);
     sf::Texture getTiles();
     sf::Sprite getTileSprite(enum Tile color);

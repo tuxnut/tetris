@@ -28,12 +28,15 @@
 #define TEXT_LINE_Y 170
 #define TEXT_NEXT_X 266
 #define TEXT_NEXT_Y 270
+#define NB_SOUND 7
 
 enum Tile { D_BLUE, PURPLE, RED, GREEN, YELLOW, L_BLUE, ORANGE, BLACK };
 
 enum Shape { O_SHAPE, I_SHAPE, S_SHAPE, Z_SHAPE, J_SHAPE, L_SHAPE, T_SHAPE };
 
-enum Sound { DELETE_LINE, ROTATE, TETRIS, GAMEOVER, PIECE_FALLEN, LEVELUP };
+enum Sound { DELETE_LINE, ROTATE, TETRIS, GATE_CLOSE, GAMEOVER, PIECE_FALLEN, LEVELUP };
+
+enum Music { MUSIC_A, MUSIC_B, SCORE };
 
 inline static int TileToInt(enum Tile color) {
     switch (color) {

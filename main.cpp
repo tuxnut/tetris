@@ -9,5 +9,6 @@ int main(int argc, char **argv) {
     Model m;
     Game game(&m, v);
     game.launch();
+    
     return 0;
 }
