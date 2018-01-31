@@ -12,6 +12,10 @@ sf::RenderWindow *View::createWindow() {
     return window;
 }
 
+sf::RenderWindow *View::getWindow() {
+    return window;
+}
+
 void View::drawTile(int px, int py, enum Tile color) {
     sf::Sprite sprite = model->getTileSprite(color);
     sprite.setPosition(px, py);

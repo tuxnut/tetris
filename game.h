@@ -29,6 +29,8 @@ class Game {
     int getLevel();
     int getNbPiece();
     void launch();
+    void pauseGame();
+    void finishGame();
     void setupNextPiece();
     void storePieceOnBoard();
     void deleteLine();

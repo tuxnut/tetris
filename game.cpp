@@ -73,6 +73,11 @@ void Game::launch() {
                 } else if (event.key.code == sf::Keyboard::Down &&
                            canMoveDown()) {
                     currPiece->moveDown();
+                } else if (event.key.code == sf::Keyboard::Space) {
+                    pauseGame();
+                } else if (event.key.code == sf::Keyboard::Escape) {
+                    finishGame();
+                    return;
                 }
         }
 
@@ -97,6 +102,25 @@ void Game::launch() {
             timer.restart();
         }
     }
+}
+
+void Game::pauseGame() {
+    sf::Event event;
+    while(view.getWindow()->waitEvent(event)) {
+        if (event.key.code == sf::Keyboard::Return) {
+            std::cout << __LINE__ << std::endl;
+            break;
+        }
+    }
+}
+
+void Game::finishGame() {
+    free(currPiece);
+    free(nextPiece);
+    for(unsigned i = 0; i < BOARD_WIDTH; i++) {
+        free(board[i]);
+    }
+    free(board);
 }
 
 void Game::setupNextPiece() {

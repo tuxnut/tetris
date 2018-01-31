@@ -22,6 +22,7 @@ class View {
     public:
     void setControler(Game *game, Model *m);
     sf::RenderWindow *createWindow();
+    sf::RenderWindow *getWindow();
     void drawTile(int px, int py, enum Tile color);
     void drawPiece(Piece &piece);
     void drawText(int px, int py, std::string text);
