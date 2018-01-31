@@ -110,7 +110,9 @@ void Game::pauseGame() {
         if (event.key.code == sf::Keyboard::Return) {
             std::cout << __LINE__ << std::endl;
             break;
-        }
+        }/* else if (event.key.code == sf::Keyboard::Escape) {
+            finishGame();
+        } */
     }
 }
 
