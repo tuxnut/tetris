@@ -16,10 +16,6 @@ Game::Game(Model *m, View &v) : view(v) {
     model->loadMusic(&music, MUSIC_A);
     loadSound();
 
-    // board = (int **)malloc(BOARD_WIDTH * sizeof(int *));
-    // for (unsigned i = 0; i < BOARD_WIDTH; i++)
-    //     board[i] = (int *)malloc(BOARD_HEIGHT * sizeof(int));
-
     board = new int*[BOARD_WIDTH * sizeof(int *)];
     for(unsigned i = 0; i < BOARD_WIDTH; i++) {
         board[i] = new int[BOARD_HEIGHT * sizeof(int)];
@@ -32,6 +28,7 @@ Game::Game(Model *m, View &v) : view(v) {
     score = 0;
     nbLines = 0;
     level = 0;
+    waitTimer = WAIT_TIME;
 }
 
 int Game::GetRandom(int inf, int sup) { return rand() % (sup - inf + 1) + inf; }
@@ -47,7 +44,7 @@ int Game::getNbPiece() { return nbPiece; }
 void Game::launch() {
     model->loadTiles();
     music.setLoop(true);
-    // music.play();
+    music.play();
 
     setupNextPiece();
     sf::RenderWindow *window = view.createWindow();
@@ -90,7 +87,7 @@ void Game::launch() {
         }
 
         auto elapsed = timer.getElapsedTime().asMilliseconds();
-        if (elapsed > WAIT_TIME) {
+        if (elapsed > waitTimer) {
             if (canMoveDown()) {
                 playSound(MOVE);
                 currPiece->moveDown();
@@ -105,7 +102,6 @@ void Game::launch() {
                     playSound(GAMEOVER);
                     return;
                 }
-
                 setupNextPiece();
             }
             timer.restart();
@@ -114,7 +110,6 @@ void Game::launch() {
 }
 
 void Game::pauseGame() {
-    view.drawText(TEXT_PAUSE_X, TEXT_PAUSE_Y, "PAUSE");
     sf::Event event;
     while(view.getWindow()->waitEvent(event)) {
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
@@ -185,7 +180,6 @@ void Game::deleteLine() {
     } else if (nbLines > 0) {
         playSound(DELETE_LINE);
     }
-
     increaseScore(nbLine);
 }
 
@@ -212,7 +206,10 @@ void Game::increaseScore(int line) {
 }
 
 void Game::increaseLevel() { 
-    level = (level == MAX_LEVEL) ? level : level + 1;
+    if (level < MAX_LEVEL) {
+        level++;
+        waitTimer -= 70;
+    }
     playSound(LEVELUP);
 }
 

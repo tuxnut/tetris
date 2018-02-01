@@ -59,3 +59,18 @@ sf::Sprite Model::getTileSprite(enum Tile color) {
         sf::IntRect(color * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE));
     return sprite;
 }
+
+std::vector<Highscore> Model::getHighscores() {
+    std::vector<Highscore> hs;
+    std::string line;
+
+    std::ifstream f_highscore ("./highscores.txt");
+    if (f_highscore.is_open()) {
+        while (getline(f_highscore, line)) {
+            std::cout << line << std::endl;
+        }
+        f_highscore.close();
+    }
+
+    return hs;
+}

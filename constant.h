@@ -132,4 +132,10 @@ static void DisplayShape(int k, int v) {
         std::cout << std::endl;
     }
 }
+
+typedef struct highscore {
+    int ladder;
+    std::string player;
+    int score;
+} Highscore;
 #endif

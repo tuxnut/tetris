@@ -1,20 +1,22 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include <SFML/Graphics.hpp>
 #include "./constant.h"
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include <fstream>
 
 class Model {
     sf::Texture tiles;
 
-    public:    
+  public:
     // Model();
     void loadTiles();
     void loadMusic(sf::Music *music, enum Music m);
     sf::SoundBuffer loadSound(enum Sound sound);
     sf::Texture getTiles();
     sf::Sprite getTileSprite(enum Tile color);
+    std::vector<Highscore> getHighscores();
 };
 
 #endif

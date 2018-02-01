@@ -20,6 +20,7 @@ class Game {
     int nbLines;
     int level;
     int nbPiece;
+    int waitTimer;
 
     public:
     Game(Model *m, View &v);
