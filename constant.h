@@ -36,12 +36,21 @@ enum Tile { D_BLUE, PURPLE, RED, GREEN, YELLOW, L_BLUE, ORANGE, BLACK };
 
 enum Shape { O_SHAPE, I_SHAPE, S_SHAPE, Z_SHAPE, J_SHAPE, L_SHAPE, T_SHAPE };
 
-enum Sound { DELETE_LINE, ROTATE, TETRIS, GATE_CLOSE, GAMEOVER, PIECE_FALLEN, LEVELUP };
+enum Sound {
+    DELETE_LINE,
+    MOVE,
+    ROTATE,
+    TETRIS,
+    GATE_CLOSE,
+    GAMEOVER,
+    PIECE_FALLEN,
+    LEVELUP
+};
 
 enum Music { MUSIC_A, MUSIC_B, SCORE };
 
 inline static int TileToInt(enum Tile color) {
-    switch (color) {
+    switch(color) {
     D_BLUE:
         return 0;
     PURPLE:
@@ -60,7 +69,7 @@ inline static int TileToInt(enum Tile color) {
 }
 
 inline static enum Tile IntToTile(int color) {
-    switch (color) {
+    switch(color) {
     D_BLUE:
         return D_BLUE;
     PURPLE:
@@ -97,8 +106,8 @@ const int shape[NB_PIECES][NB_VARIATIONS][SIZE_PIECE_SHAPE][SIZE_PIECE_SHAPE] =
      {// Z_SHAPE
       {{0, 0, 0, 0}, {0, 1, 1, 0}, {0, 0, 1, 1}, {0, 0, 0, 0}},
       {{0, 0, 1, 0}, {0, 1, 1, 0}, {0, 1, 0, 0}, {0, 0, 0, 0}},
-      {{0, 0, 1, 0}, {0, 1, 1, 0}, {0, 1, 0, 0}, {0, 0, 0, 0}},
-      {{0, 0, 0, 0}, {0, 1, 1, 0}, {0, 0, 1, 1}, {0, 0, 0, 0}}},
+      {{0, 0, 0, 0}, {0, 1, 1, 0}, {0, 0, 1, 1}, {0, 0, 0, 0}},
+      {{0, 0, 1, 0}, {0, 1, 1, 0}, {0, 1, 0, 0}, {0, 0, 0, 0}}},
      {// J_SHAPE
       {{0, 0, 0, 0}, {0, 1, 1, 1}, {0, 0, 0, 1}, {0, 0, 0, 0}},
       {{0, 0, 1, 1}, {0, 0, 1, 0}, {0, 0, 1, 0}, {0, 0, 0, 0}},
@@ -116,8 +125,8 @@ const int shape[NB_PIECES][NB_VARIATIONS][SIZE_PIECE_SHAPE][SIZE_PIECE_SHAPE] =
       {{0, 0, 1, 0}, {0, 1, 1, 0}, {0, 0, 1, 0}, {0, 0, 0, 0}}}};
 
 static void DisplayShape(int k, int v) {
-    for (unsigned i = 0; i < SIZE_PIECE_SHAPE; i++) {
-        for (unsigned j = 0; j < SIZE_PIECE_SHAPE; j++) {
+    for(unsigned i = 0; i < SIZE_PIECE_SHAPE; i++) {
+        for(unsigned j = 0; j < SIZE_PIECE_SHAPE; j++) {
             std::cout << shape[k][v][i][j] << "\t";
         }
         std::cout << std::endl;

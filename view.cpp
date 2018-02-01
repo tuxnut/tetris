@@ -24,9 +24,6 @@ void View::drawTile(int px, int py, enum Tile color) {
 }
 
 void View::drawPiece(Piece &piece) {
-    // The pieces hold their position in the board
-    // Convert from place in board to real pixel ! 
-
     int px = piece.getX();
     int py = piece.getY();
     int kind = piece.getKind();

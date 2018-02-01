@@ -16,9 +16,14 @@ Game::Game(Model *m, View &v) : view(v) {
     model->loadMusic(&music, MUSIC_A);
     loadSound();
 
-    board = (int **)malloc(BOARD_WIDTH * sizeof(int *));
-    for (unsigned i = 0; i < BOARD_WIDTH; i++)
-        board[i] = (int *)malloc(BOARD_HEIGHT * sizeof(int));
+    // board = (int **)malloc(BOARD_WIDTH * sizeof(int *));
+    // for (unsigned i = 0; i < BOARD_WIDTH; i++)
+    //     board[i] = (int *)malloc(BOARD_HEIGHT * sizeof(int));
+
+    board = new int*[BOARD_WIDTH * sizeof(int *)];
+    for(unsigned i = 0; i < BOARD_WIDTH; i++) {
+        board[i] = new int[BOARD_HEIGHT * sizeof(int)];
+    }
 
     for (unsigned i = 0; i < BOARD_WIDTH; i++)
         for (unsigned j = 0; j < BOARD_HEIGHT; j++)
@@ -42,7 +47,7 @@ int Game::getNbPiece() { return nbPiece; }
 void Game::launch() {
     model->loadTiles();
     music.setLoop(true);
-    music.play();
+    // music.play();
 
     setupNextPiece();
     sf::RenderWindow *window = view.createWindow();
@@ -66,12 +71,15 @@ void Game::launch() {
                     currPiece->rotate();
                 } else if (event.key.code == sf::Keyboard::Left &&
                            canMoveLeft()) {
+                    playSound(MOVE);
                     currPiece->moveLeft();
                 } else if (event.key.code == sf::Keyboard::Right &&
                            canMoveRight()) {
+                    playSound(MOVE);
                     currPiece->moveRight();
                 } else if (event.key.code == sf::Keyboard::Down &&
                            canMoveDown()) {
+                    playSound(MOVE);
                     currPiece->moveDown();
                 } else if (event.key.code == sf::Keyboard::Space) {
                     pauseGame();
@@ -84,6 +92,7 @@ void Game::launch() {
         auto elapsed = timer.getElapsedTime().asMilliseconds();
         if (elapsed > WAIT_TIME) {
             if (canMoveDown()) {
+                playSound(MOVE);
                 currPiece->moveDown();
             } else {
                 playSound(PIECE_FALLEN);
@@ -105,24 +114,24 @@ void Game::launch() {
 }
 
 void Game::pauseGame() {
+    view.drawText(TEXT_PAUSE_X, TEXT_PAUSE_Y, "PAUSE");
     sf::Event event;
     while(view.getWindow()->waitEvent(event)) {
-        if (event.key.code == sf::Keyboard::Return) {
-            std::cout << __LINE__ << std::endl;
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
             break;
-        }/* else if (event.key.code == sf::Keyboard::Escape) {
+        } else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
             finishGame();
-        } */
+        }
     }
 }
 
 void Game::finishGame() {
-    free(currPiece);
-    free(nextPiece);
+    delete currPiece;
+    delete nextPiece;
     for(unsigned i = 0; i < BOARD_WIDTH; i++) {
-        free(board[i]);
+        delete board[i];
     }
-    free(board);
+    delete board;
 }
 
 void Game::setupNextPiece() {
@@ -211,6 +220,8 @@ void Game::loadSound() {
     sf::SoundBuffer sb;
     sb = model->loadSound(DELETE_LINE);
     buffers.push_back(sb);
+    sb = model->loadSound(MOVE);
+    buffers.push_back(sb);
     sb = model->loadSound(ROTATE);
     buffers.push_back(sb);
     sb = model->loadSound(TETRIS);
@@ -229,7 +240,6 @@ void Game::playSound(enum Sound s) {
     // while(sound.getStatus() == sf::Sound::Playing) {
     //     sound.
     //  }
-    std::cout << s << std::endl;
     sound.setBuffer(buffers[s]);
     sound.play();
 }

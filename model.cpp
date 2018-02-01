@@ -25,6 +25,9 @@ sf::SoundBuffer Model::loadSound(enum Sound sound) {
     case DELETE_LINE:
         sb.loadFromFile("./res/clearline.ogg");
         break;
+    case MOVE:
+        sb.loadFromFile("./res/pauline.ogg");
+        break;
     case ROTATE:
         sb.loadFromFile("./res/move.ogg");
         break;

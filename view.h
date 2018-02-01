@@ -4,7 +4,6 @@
 #include "./constant.h"
 #include "./piece.h"
 #include "./game.h"
-// #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <string>
 
@@ -12,8 +11,6 @@ class Model;
 
 class View {
     private:
-    // SDL_Window *window;
-    // SDL_Surface *screen;
     sf::RenderWindow *window;
     sf::Font font;
     Game *controler;
