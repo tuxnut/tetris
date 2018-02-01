@@ -25,6 +25,7 @@ class Game {
     public:
     Game(Model *m, View &v);
     static int GetRandom(int inf, int sup);
+    static float GetRandom(float inf, float sup);
     int getScore();
     int getLines();
     int getLevel();
@@ -44,6 +45,7 @@ class Game {
     bool canMoveRight();
     bool canMoveDown();
     bool isGameOver();
+    int isHighscore();
 };
 
 #endif

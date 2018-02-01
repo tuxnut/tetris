@@ -7,15 +7,15 @@ void Model::loadMusic(sf::Music *music, enum Music m) {
     case MUSIC_A:
         if (!music->openFromFile("./res/music-A.ogg"))
             std::cout << "Could not open music file" << std::endl;
-            break;
+        break;
     case MUSIC_B:
         if (!music->openFromFile("./res/music-B.ogg"))
             std::cout << "Could not open music file" << std::endl;
-            break;
+        break;
     case SCORE:
         if (!music->openFromFile("./res/score.ogg"))
             std::cout << "Could not open music file" << std::endl;
-            break;
+        break;
     }
 }
 
@@ -60,17 +60,32 @@ sf::Sprite Model::getTileSprite(enum Tile color) {
     return sprite;
 }
 
-std::vector<Highscore> Model::getHighscores() {
+std::vector<Highscore> Model::loadHighscores() {
     std::vector<Highscore> hs;
-    std::string line;
+    std::ifstream ifs("./highscore.dat");
 
-    std::ifstream f_highscore ("./highscores.txt");
-    if (f_highscore.is_open()) {
-        while (getline(f_highscore, line)) {
-            std::cout << line << std::endl;
-        }
-        f_highscore.close();
+    ifs.seekg(0, ifs.end);
+    int length = ifs.tellg();
+    ifs.seekg(0, ifs.beg);
+
+    int nbHighscores = length / sizeof(Highscore);
+
+    for(unsigned i = 0; i < nbHighscores; i++) {
+        Highscore high;
+        ifs.read((char *)&high, sizeof(Highscore));
+        hs.push_back(high);
+    }
+    ifs.close();
+    return hs;
+}
+
+bool Model::writeHighscores(const std::vector<Highscore> &hs) const {
+    std::ofstream ofs("./highscore.dat", std::ios::binary);
+
+    for(unsigned i = 0; i < hs.size(); i++) {
+        ofs.write((char *)&hs[i], sizeof(Highscore));   
     }
 
-    return hs;
+    ofs.close();
+    return true;
 }

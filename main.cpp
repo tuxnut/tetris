@@ -6,8 +6,7 @@ int main(int argc, char **argv) {
     View v;
     Model m;
     Game game(&m, v);
-    // game.launch();
-    m.getHighscores();
-    
+    game.launch();
+
     return 0;
 }

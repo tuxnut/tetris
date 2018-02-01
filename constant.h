@@ -135,7 +135,7 @@ static void DisplayShape(int k, int v) {
 
 typedef struct highscore {
     int ladder;
-    std::string player;
+    char player[20];
     int score;
 } Highscore;
 #endif

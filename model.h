@@ -16,7 +16,8 @@ class Model {
     sf::SoundBuffer loadSound(enum Sound sound);
     sf::Texture getTiles();
     sf::Sprite getTileSprite(enum Tile color);
-    std::vector<Highscore> getHighscores();
+    std::vector<Highscore> loadHighscores();
+    bool writeHighscores(const std::vector<Highscore> &hs) const;
 };
 
 #endif

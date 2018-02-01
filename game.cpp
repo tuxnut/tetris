@@ -33,6 +33,10 @@ Game::Game(Model *m, View &v) : view(v) {
 
 int Game::GetRandom(int inf, int sup) { return rand() % (sup - inf + 1) + inf; }
 
+float Game::GetRandom(float inf, float sup) { 
+    return inf + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(sup - inf)));
+}
+
 int Game::getScore() { return score; }
 
 int Game::getLines() { return nbLines; }
@@ -100,6 +104,9 @@ void Game::launch() {
                 if (isGameOver()) {
                     playSound(GATE_CLOSE);
                     playSound(GAMEOVER);
+                    if (isHighscore()) {
+                    
+                    }
                     return;
                 }
                 setupNextPiece();
@@ -238,6 +245,8 @@ void Game::playSound(enum Sound s) {
     //     sound.
     //  }
     sound.setBuffer(buffers[s]);
+    if (s == MOVE)
+        sound.setPitch(GetRandom(1.f, 1.5f));
     sound.play();
 }
 
@@ -307,4 +316,16 @@ bool Game::isGameOver() {
             return true;
 
     return false;
+}
+
+int Game::isHighscore() {
+    std::vector<Highscore> hs = model->loadHighscores();
+
+    for(unsigned i = 0; i < hs.size(); i++) {
+        if (hs[i].score < score) {
+            return i;
+        }
+    }
+
+    return -1;
 }
