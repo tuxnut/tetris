@@ -36,6 +36,7 @@ class Game {
     void launch();
     void startGame(sf::RenderWindow *window);
     void pauseGame(sf::RenderWindow *window);
+    void displayHighscore(sf::RenderWindow *window);
     void finishGame();
     void deleteBoard();
     void setupNextPiece();
@@ -50,7 +51,7 @@ class Game {
     bool canMoveRight();
     bool canMoveDown();
     bool isGameOver();
-    int isHighscore();
+    int isHighscore(const std::vector<Highscore> &hs);
 };
 
 #endif

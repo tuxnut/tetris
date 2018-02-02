@@ -16,9 +16,9 @@ Game::Game(Model *m, View &v) : view(v) {
     model->loadMusic(&music, MUSIC_A);
     loadSound();
 
-    board = new int*[BOARD_WIDTH * sizeof(int *)];
+    board = new int *[BOARD_WIDTH * sizeof(int *)];
 
-    for(unsigned i = 0; i < BOARD_WIDTH; i++)
+    for (unsigned i = 0; i < BOARD_WIDTH; i++)
         board[i] = new int[BOARD_HEIGHT * sizeof(int)];
 
     for (unsigned i = 0; i < BOARD_WIDTH; i++)
@@ -29,13 +29,15 @@ Game::Game(Model *m, View &v) : view(v) {
     nbLines = 0;
     level = 0;
     waitTimer = WAIT_TIME;
-    state = PLAYING;
+    // state = PLAYING;
+    state = HIGHSCORE;
 }
 
 int Game::GetRandom(int inf, int sup) { return rand() % (sup - inf + 1) + inf; }
 
-float Game::GetRandom(float inf, float sup) { 
-    return inf + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(sup - inf)));
+float Game::GetRandom(float inf, float sup) {
+    return inf + static_cast<float>(rand()) /
+                     (static_cast<float>(RAND_MAX / (sup - inf)));
 }
 
 int Game::getScore() { return score; }
@@ -56,7 +58,7 @@ void Game::launch() {
     setupNextPiece();
 
     while (window->isOpen()) {
-        switch(state) {
+        switch (state) {
         case PLAYING:
             startGame(window);
             break;
@@ -66,7 +68,7 @@ void Game::launch() {
             pauseGame(window);
             break;
         case HIGHSCORE:
-            // std::vector<Highscore> hs = model->loadHighscores();
+            displayHighscore(window);
             break;
         case QUITING:
             window->close();
@@ -83,29 +85,30 @@ void Game::startGame(sf::RenderWindow *window) {
     window->display();
 
     sf::Event event;
-    while(window->pollEvent(event)) {
-        if(event.type == sf::Event::Closed) {
+    while (window->pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
             finishGame();
             deleteBoard();
             window->close();
         }
 
-        if(event.type == sf::Event::KeyPressed)
-            if(event.key.code == sf::Keyboard::Return && canRotate()) {
+        if (event.type == sf::Event::KeyPressed)
+            if (event.key.code == sf::Keyboard::Return && canRotate()) {
                 playSound(ROTATE);
                 currPiece->rotate();
-            } else if(event.key.code == sf::Keyboard::Left && canMoveLeft()) {
+            } else if (event.key.code == sf::Keyboard::Left && canMoveLeft()) {
                 playSound(MOVE);
                 currPiece->moveLeft();
-            } else if(event.key.code == sf::Keyboard::Right && canMoveRight()) {
+            } else if (event.key.code == sf::Keyboard::Right &&
+                       canMoveRight()) {
                 playSound(MOVE);
                 currPiece->moveRight();
-            } else if(event.key.code == sf::Keyboard::Down && canMoveDown()) {
+            } else if (event.key.code == sf::Keyboard::Down && canMoveDown()) {
                 playSound(MOVE);
                 currPiece->moveDown();
-            } else if(event.key.code == sf::Keyboard::Space) {
+            } else if (event.key.code == sf::Keyboard::Space) {
                 state = PAUSED;
-            } else if(event.key.code == sf::Keyboard::Escape) {
+            } else if (event.key.code == sf::Keyboard::Escape) {
                 finishGame();
                 state = QUITING;
                 return;
@@ -113,8 +116,8 @@ void Game::startGame(sf::RenderWindow *window) {
     }
 
     auto elapsed = timer.getElapsedTime().asMilliseconds();
-    if(elapsed > waitTimer) {
-        if(canMoveDown()) {
+    if (elapsed > waitTimer) {
+        if (canMoveDown()) {
             playSound(MOVE);
             currPiece->moveDown();
         } else {
@@ -123,7 +126,7 @@ void Game::startGame(sf::RenderWindow *window) {
 
             deleteLine();
 
-            if(isGameOver()) {
+            if (isGameOver()) {
                 playSound(GATE_CLOSE);
                 playSound(GAMEOVER);
                 finishGame();
@@ -137,12 +140,11 @@ void Game::startGame(sf::RenderWindow *window) {
 }
 
 void Game::pauseGame(sf::RenderWindow *window) {
-    window->clear(sf::Color::White);
     view.drawPause();
-    std::cout << "caca" << std::endl;
+    window->display();
     sf::Event event;
-    while(window->waitEvent(event)) {
-        if(event.type == sf::Event::Closed) {
+    while (window->waitEvent(event)) {
+        if (event.type == sf::Event::Closed) {
             finishGame();
             deleteBoard();
             window->close();
@@ -159,11 +161,29 @@ void Game::pauseGame(sf::RenderWindow *window) {
     }
 }
 
+void Game::displayHighscore(sf::RenderWindow *window) {
+    std::vector<Highscore> hs = model->loadHighscores();
+    int place = isHighscore(hs);
+
+    window->clear(sf::Color::White);
+    view.showHighscore(hs, place);
+    window->display();
+    
+    sf::Event event;
+    while (window->waitEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            finishGame();
+            deleteBoard();
+            window->close();
+        }
+    }
+}
+
 void Game::finishGame() {
     delete currPiece;
     delete nextPiece;
-    for(unsigned x = 0; x < BOARD_WIDTH; x++)
-        for(unsigned y = 0; y < BOARD_HEIGHT; y++)
+    for (unsigned x = 0; x < BOARD_WIDTH; x++)
+        for (unsigned y = 0; y < BOARD_HEIGHT; y++)
             board[x][y] = BOARD_FREE;
 }
 
@@ -209,7 +229,7 @@ void Game::deleteLine() {
         while (x < BOARD_WIDTH) {
             if (board[x][y] == BOARD_FREE)
                 break;
-            x++;    
+            x++;
         }
 
         if (x == BOARD_WIDTH) {
@@ -250,7 +270,7 @@ void Game::increaseScore(int line) {
     nbLines += line;
 }
 
-void Game::increaseLevel() { 
+void Game::increaseLevel() {
     if (level < MAX_LEVEL) {
         level++;
         waitTimer -= 70;
@@ -359,14 +379,11 @@ bool Game::isGameOver() {
     return false;
 }
 
-int Game::isHighscore() {
-    std::vector<Highscore> hs = model->loadHighscores();
+int Game::isHighscore(const std::vector<Highscore> &hs) {
 
-    for(unsigned i = 0; i < hs.size(); i++) {
-        if (hs[i].score < score) {
-            return i;
-        }
-    }
+    for (unsigned i = 0; i < hs.size(); i++)
+        if (hs[i].score < score)
+            return i + 1;
 
     return -1;
 }

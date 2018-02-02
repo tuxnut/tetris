@@ -5,6 +5,7 @@
 
 #define WINDOW_HEIGHT 400
 #define WINDOW_WIDTH 344
+#define PADDING 2
 #define TILE_SIZE 18
 #define NB_PIECES 7
 #define NB_VARIATIONS 4
@@ -29,7 +30,7 @@
 #define TEXT_LINE_Y 170
 #define TEXT_NEXT_X 266
 #define TEXT_NEXT_Y 270
-#define TEXT_PAUSE_X 120
+#define TEXT_PAUSE_X 89
 #define TEXT_PAUSE_Y 180
 #define NB_SOUND 7
 

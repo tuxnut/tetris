@@ -31,13 +31,10 @@ void View::drawPiece(Piece &piece) {
     enum Tile color = piece.getColor();
 
 
-    for(unsigned i = 0; i < SIZE_PIECE_SHAPE; i++) {
-        for(unsigned j = 0; j < SIZE_PIECE_SHAPE; j++) {
-            if(shape[kind][variation][j][i] != 0) {
+    for(unsigned i = 0; i < SIZE_PIECE_SHAPE; i++)
+        for(unsigned j = 0; j < SIZE_PIECE_SHAPE; j++)
+            if(shape[kind][variation][j][i] != 0)
                 drawTile(BOARD_X + (px + i) * TILE_SIZE, BOARD_Y + (py + j) * TILE_SIZE, color);
-            }
-        }
-    }
 }
 
 void View::drawText(int px, int py, std::string text) {
@@ -53,11 +50,11 @@ void View::drawText(int px, int py, std::string text) {
 
 void View::drawBoard(int **board) {
     for(unsigned i = 0; i < BOARD_WIDTH + 2; i++) {
-        drawTile((BOARD_X - TILE_SIZE) + i * TILE_SIZE, BOARD_Y - TILE_SIZE, BLACK);
-        drawTile((BOARD_X - TILE_SIZE) + i * TILE_SIZE, BOARD_Y + BOARD_HEIGHT * TILE_SIZE, BLACK);
+        drawTile(PADDING + i * TILE_SIZE, PADDING, BLACK);
+        drawTile(PADDING + i * TILE_SIZE, BOARD_Y + BOARD_HEIGHT * TILE_SIZE, BLACK);
     }
     for(unsigned i = 0; i < BOARD_HEIGHT; i++) {
-        drawTile((BOARD_X - TILE_SIZE), BOARD_Y + i * TILE_SIZE, BLACK);
+        drawTile(PADDING, BOARD_Y + i * TILE_SIZE, BLACK);
         drawTile((BOARD_X + BOARD_WIDTH * TILE_SIZE), BOARD_Y + i * TILE_SIZE, BLACK);
     }
 
@@ -77,21 +74,19 @@ void View::drawBoard(int **board) {
 
 void View::drawPause() {
     drawText(TEXT_PAUSE_X, TEXT_PAUSE_Y, "PAUSE");
-    std::cout << "nana mais allo quoi" << std::endl;
 }
 
-void View::drawGameOver(const std::vector<Highscore> &hs, bool isHighscore) {
-    window->clear(sf::Color::White);
-    for(unsigned i = 0; i < BOARD_WIDTH + 2; i++) {
-        drawTile((BOARD_X - TILE_SIZE) + i * TILE_SIZE, BOARD_Y - TILE_SIZE, BLACK);
-        drawTile((BOARD_X - TILE_SIZE) + i * TILE_SIZE, BOARD_Y + BOARD_HEIGHT * TILE_SIZE, BLACK);
+void View::showHighscore(const std::vector<Highscore> &hs, int place) {
+    int rowSize = (WINDOW_WIDTH - 2 * PADDING) / TILE_SIZE;
+    int colSize = (WINDOW_HEIGHT - 2 * PADDING) / TILE_SIZE;
+    for(unsigned i = 0; i < rowSize; i++) {
+        drawTile(PADDING + i * TILE_SIZE, PADDING, BLACK);
+        drawTile(PADDING + i * TILE_SIZE, WINDOW_HEIGHT - PADDING - TILE_SIZE, BLACK);
     }
-    for(unsigned i = 0; i < BOARD_HEIGHT; i++) {
-        drawTile((BOARD_X - TILE_SIZE), BOARD_Y + i * TILE_SIZE, BLACK);
-        drawTile((BOARD_X + BOARD_WIDTH * TILE_SIZE), BOARD_Y + i * TILE_SIZE, BLACK);
+    for(unsigned i = 0; i < colSize; i++) {
+        drawTile(PADDING, PADDING + i * TILE_SIZE, BLACK);
+        drawTile(WINDOW_WIDTH - PADDING - TILE_SIZE, PADDING + i * TILE_SIZE, BLACK);
     }
 
-    // for(unsigned i = 0; i < hs.size(); i++) {
-        
-    // }
+
 }
