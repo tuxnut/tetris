@@ -17,9 +17,9 @@ Game::Game(Model *m, View &v) : view(v) {
     loadSound();
 
     board = new int*[BOARD_WIDTH * sizeof(int *)];
-    for(unsigned i = 0; i < BOARD_WIDTH; i++) {
+
+    for(unsigned i = 0; i < BOARD_WIDTH; i++)
         board[i] = new int[BOARD_HEIGHT * sizeof(int)];
-    }
 
     for (unsigned i = 0; i < BOARD_WIDTH; i++)
         for (unsigned j = 0; j < BOARD_HEIGHT; j++)
@@ -29,6 +29,7 @@ Game::Game(Model *m, View &v) : view(v) {
     nbLines = 0;
     level = 0;
     waitTimer = WAIT_TIME;
+    state = PLAYING;
 }
 
 int Game::GetRandom(int inf, int sup) { return rand() % (sup - inf + 1) + inf; }
@@ -48,71 +49,91 @@ int Game::getNbPiece() { return nbPiece; }
 void Game::launch() {
     model->loadTiles();
     music.setLoop(true);
-    music.play();
+    // music.play();
+
+    sf::RenderWindow *window = view.createWindow();
 
     setupNextPiece();
-    sf::RenderWindow *window = view.createWindow();
-    sf::Clock timer;
 
     while (window->isOpen()) {
-        window->clear(sf::Color::White);
-        view.drawBoard(board);
-        view.drawPiece(*currPiece);
-        view.drawPiece(*nextPiece);
-        window->display();
 
-        sf::Event event;
-        while (window->pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window->close();
+        switch(state) {
+        case PLAYING:
+            startGame(window);
+            break;
+        case MENU:
+            break;
+        case PAUSED:
+            pauseGame();
+            break;
+        case HIGHSCORE:
+            // std::vector<Highscore> hs = model->loadHighscores();
+            break;
+        case QUITING:
+            window->close();
+            break;
+        }
+    }
+}
 
-            if (event.type == sf::Event::KeyPressed)
-                if (event.key.code == sf::Keyboard::Return && canRotate()) {
-                    playSound(ROTATE);
-                    currPiece->rotate();
-                } else if (event.key.code == sf::Keyboard::Left &&
-                           canMoveLeft()) {
-                    playSound(MOVE);
-                    currPiece->moveLeft();
-                } else if (event.key.code == sf::Keyboard::Right &&
-                           canMoveRight()) {
-                    playSound(MOVE);
-                    currPiece->moveRight();
-                } else if (event.key.code == sf::Keyboard::Down &&
-                           canMoveDown()) {
-                    playSound(MOVE);
-                    currPiece->moveDown();
-                } else if (event.key.code == sf::Keyboard::Space) {
-                    pauseGame();
-                } else if (event.key.code == sf::Keyboard::Escape) {
-                    finishGame();
-                    return;
-                }
+void Game::startGame(sf::RenderWindow *window) {
+    window->clear(sf::Color::White);
+    view.drawBoard(board);
+    view.drawPiece(*currPiece);
+    view.drawPiece(*nextPiece);
+    window->display();
+
+    sf::Event event;
+    while(window->pollEvent(event)) {
+        if(event.type == sf::Event::Closed) {
+            finishGame();
+            deleteBoard();
+            window->close();
         }
 
-        auto elapsed = timer.getElapsedTime().asMilliseconds();
-        if (elapsed > waitTimer) {
-            if (canMoveDown()) {
+        if(event.type == sf::Event::KeyPressed)
+            if(event.key.code == sf::Keyboard::Return && canRotate()) {
+                playSound(ROTATE);
+                currPiece->rotate();
+            } else if(event.key.code == sf::Keyboard::Left && canMoveLeft()) {
+                playSound(MOVE);
+                currPiece->moveLeft();
+            } else if(event.key.code == sf::Keyboard::Right && canMoveRight()) {
+                playSound(MOVE);
+                currPiece->moveRight();
+            } else if(event.key.code == sf::Keyboard::Down && canMoveDown()) {
                 playSound(MOVE);
                 currPiece->moveDown();
-            } else {
-                playSound(PIECE_FALLEN);
-                storePieceOnBoard();
-
-                deleteLine();
-
-                if (isGameOver()) {
-                    playSound(GATE_CLOSE);
-                    playSound(GAMEOVER);
-                    if (isHighscore()) {
-                    
-                    }
-                    return;
-                }
-                setupNextPiece();
+            } else if(event.key.code == sf::Keyboard::Space) {
+                state = PAUSED;
+            } else if(event.key.code == sf::Keyboard::Escape) {
+                finishGame();
+                state = QUITING;
+                return;
             }
-            timer.restart();
+    }
+
+    auto elapsed = timer.getElapsedTime().asMilliseconds();
+    if(elapsed > waitTimer) {
+        if(canMoveDown()) {
+            playSound(MOVE);
+            currPiece->moveDown();
+        } else {
+            playSound(PIECE_FALLEN);
+            storePieceOnBoard();
+
+            deleteLine();
+
+            if(isGameOver()) {
+                playSound(GATE_CLOSE);
+                playSound(GAMEOVER);
+                finishGame();
+                state = HIGHSCORE;
+                return;
+            }
+            setupNextPiece();
         }
+        timer.restart();
     }
 }
 
@@ -120,9 +141,11 @@ void Game::pauseGame() {
     sf::Event event;
     while(view.getWindow()->waitEvent(event)) {
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+            state = PLAYING;
             break;
         } else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
             finishGame();
+            state = QUITING;
         }
     }
 }
@@ -130,9 +153,14 @@ void Game::pauseGame() {
 void Game::finishGame() {
     delete currPiece;
     delete nextPiece;
-    for(unsigned i = 0; i < BOARD_WIDTH; i++) {
+    for(unsigned x = 0; x < BOARD_WIDTH; x++)
+        for(unsigned y = 0; y < BOARD_HEIGHT; y++)
+            board[x][y] = BOARD_FREE;
+}
+
+void Game::deleteBoard() {
+    for (unsigned i = 0; i < BOARD_WIDTH; i++)
         delete board[i];
-    }
     delete board;
 }
 
@@ -172,7 +200,7 @@ void Game::deleteLine() {
         while (x < BOARD_WIDTH) {
             if (board[x][y] == BOARD_FREE)
                 break;
-            x++;
+            x++;    
         }
 
         if (x == BOARD_WIDTH) {
@@ -182,6 +210,7 @@ void Game::deleteLine() {
             nbLine++;
         }
     }
+
     if (nbLines >= 4) {
         playSound(TETRIS);
     } else if (nbLines > 0) {
@@ -247,6 +276,9 @@ void Game::playSound(enum Sound s) {
     sound.setBuffer(buffers[s]);
     if (s == MOVE)
         sound.setPitch(GetRandom(1.f, 1.5f));
+    else
+        sound.setPitch(1);
+
     sound.play();
 }
 

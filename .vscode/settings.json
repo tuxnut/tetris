@@ -68,6 +68,7 @@
         "typeinfo": "cpp",
         "utility": "cpp",
         "atomic": "cpp",
-        "cstddef": "cpp"
+        "cstddef": "cpp",
+        "string": "cpp"
     }
 }

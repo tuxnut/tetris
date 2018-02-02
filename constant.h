@@ -49,6 +49,8 @@ enum Sound {
 
 enum Music { MUSIC_A, MUSIC_B, SCORE };
 
+enum GameState { MENU, PLAYING, PAUSED, HIGHSCORE, QUITING };
+
 inline static int TileToInt(enum Tile color) {
     switch(color) {
     D_BLUE:

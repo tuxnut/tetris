@@ -20,7 +20,6 @@ void View::drawTile(int px, int py, enum Tile color) {
     sf::Sprite sprite = model->getTileSprite(color);
     sprite.setPosition(px, py);
     window->draw(sprite);
-    // window->display();
 }
 
 void View::drawPiece(Piece &piece) {
@@ -73,4 +72,20 @@ void View::drawBoard(int **board) {
     drawText(TEXT_LINE_X, TEXT_LINE_Y, "LINES");
     drawText(TEXT_LINE_X + 20, TEXT_LINE_Y + 20, std::to_string(controler->getLines()));
     drawText(TEXT_NEXT_X, TEXT_NEXT_Y, "NEXT");
+}
+
+void View::drawGameOver(const std::vector<Highscore> &hs, bool isHighscore) {
+    window->clear(sf::Color::White);
+    for(unsigned i = 0; i < BOARD_WIDTH + 2; i++) {
+        drawTile((BOARD_X - TILE_SIZE) + i * TILE_SIZE, BOARD_Y - TILE_SIZE, BLACK);
+        drawTile((BOARD_X - TILE_SIZE) + i * TILE_SIZE, BOARD_Y + BOARD_HEIGHT * TILE_SIZE, BLACK);
+    }
+    for(unsigned i = 0; i < BOARD_HEIGHT; i++) {
+        drawTile((BOARD_X - TILE_SIZE), BOARD_Y + i * TILE_SIZE, BLACK);
+        drawTile((BOARD_X + BOARD_WIDTH * TILE_SIZE), BOARD_Y + i * TILE_SIZE, BLACK);
+    }
+
+    // for(unsigned i = 0; i < hs.size(); i++) {
+        
+    // }
 }

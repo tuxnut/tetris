@@ -2,18 +2,21 @@
 #define GAME_H
 #include "./piece.h"
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
 
 class View;
 class Model;
 
 class Game {
-    private:
+  private:
+    enum GameState state;
     View &view;
     Model *model;
     Piece *currPiece;
     Piece *nextPiece;
     sf::Music music;
     sf::Sound sound;
+    sf::Clock timer;
     std::vector<sf::SoundBuffer> buffers;
     int **board;
     int score;
@@ -22,7 +25,7 @@ class Game {
     int nbPiece;
     int waitTimer;
 
-    public:
+  public:
     Game(Model *m, View &v);
     static int GetRandom(int inf, int sup);
     static float GetRandom(float inf, float sup);
@@ -31,8 +34,10 @@ class Game {
     int getLevel();
     int getNbPiece();
     void launch();
+    void startGame(sf::RenderWindow *window);
     void pauseGame();
     void finishGame();
+    void deleteBoard();
     void setupNextPiece();
     void storePieceOnBoard();
     void deleteLine();
