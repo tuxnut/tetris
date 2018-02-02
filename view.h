@@ -24,6 +24,7 @@ class View {
     void drawPiece(Piece &piece);
     void drawText(int px, int py, std::string text);
     void drawBoard(int **board);
+    void drawPause();
     void drawGameOver(const std::vector<Highscore> &hs, bool isHighscore);
 };
 

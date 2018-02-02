@@ -56,7 +56,6 @@ void Game::launch() {
     setupNextPiece();
 
     while (window->isOpen()) {
-
         switch(state) {
         case PLAYING:
             startGame(window);
@@ -64,7 +63,7 @@ void Game::launch() {
         case MENU:
             break;
         case PAUSED:
-            pauseGame();
+            pauseGame(window);
             break;
         case HIGHSCORE:
             // std::vector<Highscore> hs = model->loadHighscores();
@@ -137,15 +136,25 @@ void Game::startGame(sf::RenderWindow *window) {
     }
 }
 
-void Game::pauseGame() {
+void Game::pauseGame(sf::RenderWindow *window) {
+    window->clear(sf::Color::White);
+    view.drawPause();
+    std::cout << "caca" << std::endl;
     sf::Event event;
-    while(view.getWindow()->waitEvent(event)) {
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
-            state = PLAYING;
-            break;
-        } else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+    while(window->waitEvent(event)) {
+        if(event.type == sf::Event::Closed) {
             finishGame();
-            state = QUITING;
+            deleteBoard();
+            window->close();
+        } else if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Space) {
+                state = PLAYING;
+                break;
+            } else if (event.key.code == sf::Keyboard::Escape) {
+                finishGame();
+                state = QUITING;
+                break;
+            }
         }
     }
 }

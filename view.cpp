@@ -8,6 +8,7 @@ void View::setControler(Game *game, Model *m) {
 
 sf::RenderWindow *View::createWindow() {
     window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Tetris");
+    window->setFramerateLimit(FPS);
     font.loadFromFile("./res/Roboto-Regular.ttf");
     return window;
 }
@@ -72,6 +73,11 @@ void View::drawBoard(int **board) {
     drawText(TEXT_LINE_X, TEXT_LINE_Y, "LINES");
     drawText(TEXT_LINE_X + 20, TEXT_LINE_Y + 20, std::to_string(controler->getLines()));
     drawText(TEXT_NEXT_X, TEXT_NEXT_Y, "NEXT");
+}
+
+void View::drawPause() {
+    drawText(TEXT_PAUSE_X, TEXT_PAUSE_Y, "PAUSE");
+    std::cout << "nana mais allo quoi" << std::endl;
 }
 
 void View::drawGameOver(const std::vector<Highscore> &hs, bool isHighscore) {

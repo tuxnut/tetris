@@ -35,7 +35,7 @@ class Game {
     int getNbPiece();
     void launch();
     void startGame(sf::RenderWindow *window);
-    void pauseGame();
+    void pauseGame(sf::RenderWindow *window);
     void finishGame();
     void deleteBoard();
     void setupNextPiece();

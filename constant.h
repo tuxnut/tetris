@@ -19,6 +19,7 @@
 #define PIECE_OFFSET_Y -1
 #define BOARD_FREE 255
 #define WAIT_TIME 700
+#define FPS 120
 #define MAX_LEVEL 10
 #define TEXT_SCORE_X 263
 #define TEXT_SCORE_Y 30
