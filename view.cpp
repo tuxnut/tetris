@@ -79,14 +79,24 @@ void View::drawPause() {
 void View::showHighscore(const std::vector<Highscore> &hs, int place) {
     int rowSize = (WINDOW_WIDTH - 2 * PADDING) / TILE_SIZE;
     int colSize = (WINDOW_HEIGHT - 2 * PADDING) / TILE_SIZE;
-    for(unsigned i = 0; i < rowSize; i++) {
+    for(int i = 0; i < rowSize; i++) {
         drawTile(PADDING + i * TILE_SIZE, PADDING, BLACK);
         drawTile(PADDING + i * TILE_SIZE, WINDOW_HEIGHT - PADDING - TILE_SIZE, BLACK);
     }
-    for(unsigned i = 0; i < colSize; i++) {
+    for(int i = 0; i < colSize; i++) {
         drawTile(PADDING, PADDING + i * TILE_SIZE, BLACK);
         drawTile(WINDOW_WIDTH - PADDING - TILE_SIZE, PADDING + i * TILE_SIZE, BLACK);
     }
+    for (int i = 0; i < hs.size(); i++) {
+        std::string name = std::to_string(hs[i].ladder) + ". ";
+        name += (place == i + 1) ? "" : hs[i].player;
+        std::string points = std::to_string(hs[i].score);
 
+        drawText(BOARD_X + 50, PADDING + 2 * (i + 1) * TILE_SIZE, name);
+        drawText(BOARD_X + 220, PADDING + 2 * (i + 1) * TILE_SIZE, points);
+    }
+}
 
+void View::drawPlayerNameOnHighscore(int place, std::string name) {
+    drawText(BOARD_X + 50 + 14, PADDING + 2 * place * TILE_SIZE, name);
 }

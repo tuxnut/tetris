@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include "./piece.h"
+#include <string.h>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
@@ -51,7 +52,7 @@ class Game {
     bool canMoveRight();
     bool canMoveDown();
     bool isGameOver();
-    int isHighscore(const std::vector<Highscore> &hs);
+    int isHighscore(std::vector<Highscore> &hs);
 };
 
 #endif

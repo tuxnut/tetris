@@ -26,6 +26,7 @@ class View {
     void drawBoard(int **board);
     void drawPause();
     void showHighscore(const std::vector<Highscore> &hs, int place);
+    void drawPlayerNameOnHighscore(int place, std::string name);
 };
 
 #endif

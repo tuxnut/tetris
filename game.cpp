@@ -29,8 +29,7 @@ Game::Game(Model *m, View &v) : view(v) {
     nbLines = 0;
     level = 0;
     waitTimer = WAIT_TIME;
-    // state = PLAYING;
-    state = HIGHSCORE;
+    state = PLAYING;
 }
 
 int Game::GetRandom(int inf, int sup) { return rand() % (sup - inf + 1) + inf; }
@@ -108,6 +107,8 @@ void Game::startGame(sf::RenderWindow *window) {
                 currPiece->moveDown();
             } else if (event.key.code == sf::Keyboard::Space) {
                 state = PAUSED;
+            } else if (event.key.code == sf::Keyboard::A) {
+                state = HIGHSCORE;
             } else if (event.key.code == sf::Keyboard::Escape) {
                 finishGame();
                 state = QUITING;
@@ -118,7 +119,7 @@ void Game::startGame(sf::RenderWindow *window) {
     auto elapsed = timer.getElapsedTime().asMilliseconds();
     if (elapsed > waitTimer) {
         if (canMoveDown()) {
-            playSound(MOVE);
+            // playSound(MOVE);
             currPiece->moveDown();
         } else {
             playSound(PIECE_FALLEN);
@@ -163,18 +164,26 @@ void Game::pauseGame(sf::RenderWindow *window) {
 
 void Game::displayHighscore(sf::RenderWindow *window) {
     std::vector<Highscore> hs = model->loadHighscores();
-    int place = isHighscore(hs);
+    int place = 2; // isHighscore(hs);
+    std::string playername = "";
 
-    window->clear(sf::Color::White);
-    view.showHighscore(hs, place);
-    window->display();
-    
     sf::Event event;
     while (window->waitEvent(event)) {
+        window->clear(sf::Color::White);
+        view.showHighscore(hs, place);
+        view.drawPlayerNameOnHighscore(place, playername);
+        window->display();
         if (event.type == sf::Event::Closed) {
             finishGame();
             deleteBoard();
             window->close();
+        } else if (event.type == sf::Event::TextEntered && place != -1) {
+            if (31 < event.text.unicode && event.text.unicode < 128 &&
+                playername.length() < 20) {
+                playername += static_cast<char>(event.text.unicode);
+            } else if (event.text.unicode == 8 && playername.length() > 0) {
+                playername.erase(playername.length() - 1);
+            }
         }
     }
 }
@@ -379,11 +388,28 @@ bool Game::isGameOver() {
     return false;
 }
 
-int Game::isHighscore(const std::vector<Highscore> &hs) {
+int Game::isHighscore(std::vector<Highscore> &hs) {
+    int place = -1;
 
-    for (unsigned i = 0; i < hs.size(); i++)
-        if (hs[i].score < score)
-            return i + 1;
+    for (unsigned i = 0; i < hs.size(); i++) {
+        if (hs[i].score < score) {
+            place = i + 1;
 
-    return -1;
+            Highscore newHs;
+            newHs.ladder = place;
+            newHs.score = score;
+            strcpy(newHs.player, "");
+
+            hs.emplace(hs.begin() + i, newHs);
+
+            if (hs.size() > 10)
+                hs.pop_back();
+        }
+
+        if (place != -1) {
+            hs[i].ladder++;
+        }
+    }
+
+    return place;
 }

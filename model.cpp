@@ -70,7 +70,7 @@ std::vector<Highscore> Model::loadHighscores() {
 
     int nbHighscores = length / sizeof(Highscore);
 
-    for(unsigned i = 0; i < nbHighscores; i++) {
+    for(int i = 0; i < nbHighscores; i++) {
         Highscore high;
         ifs.read((char *)&high, sizeof(Highscore));
         hs.push_back(high);

@@ -3,7 +3,7 @@
         "javascript": "node",
         "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
         "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
-        "cpp": "cd $dir && g++ -W -std=c++11 main.cpp game.cpp view.cpp model.cpp piece.cpp -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -o main && $dirmain",
+        "cpp": "cd $dir && g++ -W -std=c++11 *.cpp -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -o main && $dirmain",
         "objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
         "php": "php",
         "python": "python",
@@ -69,6 +69,9 @@
         "utility": "cpp",
         "atomic": "cpp",
         "cstddef": "cpp",
-        "string": "cpp"
-    }
+        "string": "cpp",
+        "fstream": "cpp"
+    },
+    "code-runner.runInTerminal": true,
+    "code-runner.ignoreSelection": true
 }
