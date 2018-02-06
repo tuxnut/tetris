@@ -64,6 +64,9 @@ std::vector<Highscore> Model::loadHighscores() {
     std::vector<Highscore> hs;
     std::ifstream ifs("./highscore.dat");
 
+    if (!ifs.is_open())
+        return hs;
+
     ifs.seekg(0, ifs.end);
     int length = ifs.tellg();
     ifs.seekg(0, ifs.beg);
@@ -79,7 +82,9 @@ std::vector<Highscore> Model::loadHighscores() {
     return hs;
 }
 
-bool Model::writeHighscores(const std::vector<Highscore> &hs) const {
+bool Model::writeHighscores(std::vector<Highscore> &hs, std::string playername, int place) const {
+    strcpy(hs[place-1].player, playername.c_str());
+    
     std::ofstream ofs("./highscore.dat", std::ios::binary);
 
     for(unsigned i = 0; i < hs.size(); i++) {

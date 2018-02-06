@@ -90,7 +90,6 @@ void Game::startGame(sf::RenderWindow *window) {
             deleteBoard();
             window->close();
         }
-
         if (event.type == sf::Event::KeyPressed)
             if (event.key.code == sf::Keyboard::Return && canRotate()) {
                 playSound(ROTATE);
@@ -164,7 +163,13 @@ void Game::pauseGame(sf::RenderWindow *window) {
 
 void Game::displayHighscore(sf::RenderWindow *window) {
     std::vector<Highscore> hs = model->loadHighscores();
-    int place = 2; // isHighscore(hs);
+
+    if (hs.size() == 0) {
+        state = PLAYING;
+        return;
+    }
+
+    int place = isHighscore(hs);
     std::string playername = "";
 
     sf::Event event;
@@ -183,6 +188,10 @@ void Game::displayHighscore(sf::RenderWindow *window) {
                 playername += static_cast<char>(event.text.unicode);
             } else if (event.text.unicode == 8 && playername.length() > 0) {
                 playername.erase(playername.length() - 1);
+            }
+        } else if (event.key.code == sf::Keyboard::Return) {
+            if (place != -1 && !playername.empty()) {
+                model->writeHighscores(hs, playername, place);
             }
         }
     }
@@ -392,7 +401,7 @@ int Game::isHighscore(std::vector<Highscore> &hs) {
     int place = -1;
 
     for (unsigned i = 0; i < hs.size(); i++) {
-        if (hs[i].score < score) {
+        if (hs[i].score < score && place == -1) {
             place = i + 1;
 
             Highscore newHs;

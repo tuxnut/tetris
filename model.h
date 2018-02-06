@@ -5,6 +5,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <fstream>
+#include <string.h>
 
 class Model {
     sf::Texture tiles;
@@ -17,7 +18,7 @@ class Model {
     sf::Texture getTiles();
     sf::Sprite getTileSprite(enum Tile color);
     std::vector<Highscore> loadHighscores();
-    bool writeHighscores(const std::vector<Highscore> &hs) const;
+    bool writeHighscores(std::vector<Highscore> &hs, std::string playername, int place) const;
 };
 
 #endif
