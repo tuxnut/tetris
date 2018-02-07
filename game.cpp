@@ -127,6 +127,7 @@ void Game::startGame(sf::RenderWindow *window) {
             deleteLine();
 
             if (isGameOver()) {
+                std::cout << "Game Over" << std::endl;
                 playSound(GATE_CLOSE);
                 playSound(GAMEOVER);
                 finishGame();
@@ -413,10 +414,10 @@ int Game::isHighscore(std::vector<Highscore> &hs) {
 
             if (hs.size() > 10)
                 hs.pop_back();
-        }
-
-        if (place != -1) {
-            hs[i].ladder++;
+        } else {
+            if (place != -1) {
+                hs[i].ladder++;
+            }
         }
     }
 

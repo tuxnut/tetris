@@ -2,6 +2,7 @@
 #define CONSTANT_H
 
 #include <iostream>
+#include <fstream>
 
 #define WINDOW_HEIGHT 400
 #define WINDOW_WIDTH 344
@@ -128,6 +129,13 @@ const int shape[NB_PIECES][NB_VARIATIONS][SIZE_PIECE_SHAPE][SIZE_PIECE_SHAPE] =
       {{0, 0, 1, 0}, {0, 1, 1, 1}, {0, 0, 0, 0}, {0, 0, 0, 0}},
       {{0, 0, 1, 0}, {0, 1, 1, 0}, {0, 0, 1, 0}, {0, 0, 0, 0}}}};
 
+
+typedef struct highscore {
+    int ladder;
+    char player[20];
+    int score;
+} Highscore;
+
 static void DisplayShape(int k, int v) {
     for(unsigned i = 0; i < SIZE_PIECE_SHAPE; i++) {
         for(unsigned j = 0; j < SIZE_PIECE_SHAPE; j++) {
@@ -137,9 +145,28 @@ static void DisplayShape(int k, int v) {
     }
 }
 
-typedef struct highscore {
-    int ladder;
-    char player[20];
-    int score;
-} Highscore;
+static void DisplayHighscores() {
+    std::ifstream ifs("./highscore.dat");
+
+    if (!ifs.is_open()) {
+        std::cout << "Could not open highscores file" << std::endl;
+        return;
+    }
+
+    ifs.seekg(0, ifs.end);
+    int length = ifs.tellg();
+    ifs.seekg(0, ifs.beg);
+
+    int nbHighscores = length / sizeof(Highscore);
+
+    for(int i = 0; i < nbHighscores; i++) {
+        Highscore high;
+        ifs.read((char *)&high, sizeof(Highscore));
+        std::cout << high.ladder << "\t";
+        std::cout << high.player << "\t";
+        std::cout << high.score << std::endl;
+    }
+    ifs.close();
+    return;
+}
 #endif
