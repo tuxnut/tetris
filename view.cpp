@@ -77,6 +77,8 @@ void View::drawPause() {
 }
 
 void View::showHighscore(const std::vector<Highscore> &hs, int place) {
+    window->clear(sf::Color::White);
+
     int rowSize = (WINDOW_WIDTH - 2 * PADDING) / TILE_SIZE;
     int colSize = (WINDOW_HEIGHT - 2 * PADDING) / TILE_SIZE;
     for(int i = 0; i < rowSize; i++) {

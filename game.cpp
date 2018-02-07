@@ -127,7 +127,6 @@ void Game::startGame(sf::RenderWindow *window) {
             deleteLine();
 
             if (isGameOver()) {
-                std::cout << "Game Over" << std::endl;
                 playSound(GATE_CLOSE);
                 playSound(GAMEOVER);
                 finishGame();
@@ -173,9 +172,10 @@ void Game::displayHighscore(sf::RenderWindow *window) {
     int place = isHighscore(hs);
     std::string playername = "";
 
+    view.showHighscore(hs, place);
+
     sf::Event event;
     while (window->waitEvent(event)) {
-        window->clear(sf::Color::White);
         view.showHighscore(hs, place);
         view.drawPlayerNameOnHighscore(place, playername);
         window->display();
@@ -193,7 +193,14 @@ void Game::displayHighscore(sf::RenderWindow *window) {
         } else if (event.key.code == sf::Keyboard::Return) {
             if (place != -1 && !playername.empty()) {
                 model->writeHighscores(hs, playername, place);
+                state = PLAYING;
+                setupNextPiece();
+                return;
             }
+        } else if (event.key.code == sf::Keyboard::Escape) {
+            state = PLAYING;
+            setupNextPiece();
+            return;
         }
     }
 }
@@ -259,9 +266,9 @@ void Game::deleteLine() {
         }
     }
 
-    if (nbLines >= 4) {
+    if (nbLine >= 4) {
         playSound(TETRIS);
-    } else if (nbLines > 0) {
+    } else if (nbLine > 0) {
         playSound(DELETE_LINE);
     }
     increaseScore(nbLine);
@@ -391,7 +398,7 @@ bool Game::canMoveDown() {
 }
 
 bool Game::isGameOver() {
-    for (unsigned i = 0; i < SIZE_PIECE_SHAPE; i++)
+    for (unsigned i = 0; i < BOARD_WIDTH; i++)
         if (board[i][0] != BOARD_FREE)
             return true;
 
