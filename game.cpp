@@ -10,8 +10,7 @@ Game::Game(Model *m, View &v) : view(v) {
 
     currPiece = new Piece();
     nextPiece = new Piece();
-    nextPiece->setX(NEXTPIECE_X);
-    nextPiece->setY(NEXTPIECE_Y);
+    setupNextPiece();
 
     model->loadMusic(&music, MUSIC_A);
     loadSound();
@@ -29,7 +28,7 @@ Game::Game(Model *m, View &v) : view(v) {
     nbLines = 0;
     level = 0;
     waitTimer = WAIT_TIME;
-    state = PLAYING;
+    state = HIGHSCORE;
 }
 
 int Game::GetRandom(int inf, int sup) { return rand() % (sup - inf + 1) + inf; }
@@ -78,9 +77,13 @@ void Game::launch() {
 
 void Game::startGame(sf::RenderWindow *window) {
     window->clear(sf::Color::White);
+    std::cout << __LINE__ << std::endl;
     view.drawBoard(board);
+    std::cout << __LINE__ << std::endl;
     view.drawPiece(*currPiece);
+    std::cout << __LINE__ << std::endl;
     view.drawPiece(*nextPiece);
+    std::cout << __LINE__ << std::endl;
     window->display();
 
     sf::Event event;

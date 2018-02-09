@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <string.h>
 
 #define WINDOW_HEIGHT 400
 #define WINDOW_WIDTH 344
@@ -33,7 +34,6 @@
 #define TEXT_NEXT_Y 270
 #define TEXT_PAUSE_X 89
 #define TEXT_PAUSE_Y 180
-#define NB_SOUND 7
 
 enum Tile { D_BLUE, PURPLE, RED, GREEN, YELLOW, L_BLUE, ORANGE, BLACK };
 
@@ -167,6 +167,20 @@ static void DisplayHighscores() {
         std::cout << high.score << std::endl;
     }
     ifs.close();
-    return;
 }
+
+static void ResetHighscores() {
+    std::ofstream ofs("./highscore.dat", std::ios::binary);
+
+    for(unsigned i = 0; i < 5; i++) {
+        Highscore hs;
+        hs.ladder = i + 1;
+        strcpy(hs.player, "Unknown");
+        hs.score = 0;
+
+        ofs.write((char *)&hs, sizeof(Highscore));
+    }
+    ofs.close();
+}
+
 #endif

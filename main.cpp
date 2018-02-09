@@ -8,6 +8,7 @@ int main(int argc, char **argv) {
     Game game(&m, v);
     game.launch();
 
+    // ResetHighscores();
     // DisplayHighscores();
     return 0;
 }

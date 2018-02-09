@@ -4,8 +4,6 @@
 #include "./constant.h"
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include <fstream>
-#include <string.h>
 
 class Model {
     sf::Texture tiles;
