@@ -9,8 +9,6 @@
 
 !res/
 !res/*
-!former/
-!former/*
 
 !.vscode/
 !.vscode/settings.json

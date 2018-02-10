@@ -49,6 +49,8 @@ void View::drawText(int px, int py, std::string text) {
 }
 
 void View::drawBoard(int **board) {
+    window->clear(sf::Color::White);
+    
     for(unsigned i = 0; i < BOARD_WIDTH + 2; i++) {
         drawTile(PADDING + i * TILE_SIZE, PADDING, BLACK);
         drawTile(PADDING + i * TILE_SIZE, BOARD_Y + BOARD_HEIGHT * TILE_SIZE, BLACK);
@@ -76,7 +78,7 @@ void View::drawPause() {
     drawText(TEXT_PAUSE_X, TEXT_PAUSE_Y, "PAUSE");
 }
 
-void View::showHighscore(const std::vector<Highscore> &hs, int place) {
+void View::drawHighscore(const std::vector<Highscore> &hs, int place) {
     window->clear(sf::Color::White);
 
     int rowSize = (WINDOW_WIDTH - 2 * PADDING) / TILE_SIZE;

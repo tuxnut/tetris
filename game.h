@@ -28,6 +28,7 @@ class Game {
 
   public:
     Game(Model *m, View &v);
+    ~Game();
     static int GetRandom(int inf, int sup);
     static float GetRandom(float inf, float sup);
     int getScore();
@@ -38,8 +39,8 @@ class Game {
     void startGame(sf::RenderWindow *window);
     void pauseGame(sf::RenderWindow *window);
     void displayHighscore(sf::RenderWindow *window);
-    void finishGame();
-    void deleteBoard();
+    void displayMenu(sf::RenderWindow *window);
+    void resetBoard();
     void setupNextPiece();
     void storePieceOnBoard();
     void deleteLine();
