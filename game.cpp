@@ -24,11 +24,11 @@ Game::Game(Model *m, View &v) : view(v) {
         for (unsigned j = 0; j < BOARD_HEIGHT; j++)
             board[i][j] = BOARD_FREE;
 
-    score = 0;
+    score = 50;
     nbLines = 0;
     level = 0;
     waitTimer = WAIT_TIME;
-    state = HIGHSCORE;
+    state = PLAYING;
 }
 
 int Game::GetRandom(int inf, int sup) { return rand() % (sup - inf + 1) + inf; }
@@ -58,6 +58,7 @@ void Game::launch() {
     while (window->isOpen()) {
         switch (state) {
         case PLAYING:
+        std::cout << __LINE__ << std::endl;
             startGame(window);
             break;
         case MENU:
@@ -69,29 +70,26 @@ void Game::launch() {
             displayHighscore(window);
             break;
         case QUITING:
+            finishGame();
+            deleteBoard();
             window->close();
-            break;
+            return;
         }
     }
 }
 
 void Game::startGame(sf::RenderWindow *window) {
     window->clear(sf::Color::White);
-    std::cout << __LINE__ << std::endl;
     view.drawBoard(board);
-    std::cout << __LINE__ << std::endl;
     view.drawPiece(*currPiece);
-    std::cout << __LINE__ << std::endl;
     view.drawPiece(*nextPiece);
-    std::cout << __LINE__ << std::endl;
     window->display();
 
     sf::Event event;
     while (window->pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
-            finishGame();
-            deleteBoard();
-            window->close();
+            state = QUITING;
+            return;
         }
         if (event.type == sf::Event::KeyPressed)
             if (event.key.code == sf::Keyboard::Return && canRotate()) {
@@ -112,7 +110,6 @@ void Game::startGame(sf::RenderWindow *window) {
             } else if (event.key.code == sf::Keyboard::A) {
                 state = HIGHSCORE;
             } else if (event.key.code == sf::Keyboard::Escape) {
-                finishGame();
                 state = QUITING;
                 return;
             }
@@ -156,7 +153,6 @@ void Game::pauseGame(sf::RenderWindow *window) {
                 state = PLAYING;
                 break;
             } else if (event.key.code == sf::Keyboard::Escape) {
-                finishGame();
                 state = QUITING;
                 break;
             }
@@ -183,9 +179,8 @@ void Game::displayHighscore(sf::RenderWindow *window) {
         view.drawPlayerNameOnHighscore(place, playername);
         window->display();
         if (event.type == sf::Event::Closed) {
-            finishGame();
-            deleteBoard();
-            window->close();
+            state = QUITING;
+            return;
         } else if (event.type == sf::Event::TextEntered && place != -1) {
             if (31 < event.text.unicode && event.text.unicode < 128 &&
                 playername.length() < 20) {
@@ -197,7 +192,12 @@ void Game::displayHighscore(sf::RenderWindow *window) {
             if (place != -1 && !playername.empty()) {
                 model->writeHighscores(hs, playername, place);
                 state = PLAYING;
+                std::cout << __LINE__ << std::endl;
                 setupNextPiece();
+                std::cout << __LINE__ << std::endl;
+                if(currPiece == nullptr) std::cout << "currpiece" << std::endl;
+                if(nextPiece == nullptr) std::cout << "nextpiece" << std::endl;
+                if(board == nullptr) std::cout << "board" << std::endl;
                 return;
             }
         } else if (event.key.code == sf::Keyboard::Escape) {
@@ -209,27 +209,32 @@ void Game::displayHighscore(sf::RenderWindow *window) {
 }
 
 void Game::finishGame() {
-    delete currPiece;
-    delete nextPiece;
     for (unsigned x = 0; x < BOARD_WIDTH; x++)
         for (unsigned y = 0; y < BOARD_HEIGHT; y++)
             board[x][y] = BOARD_FREE;
 }
 
 void Game::deleteBoard() {
+    delete currPiece;
+    delete nextPiece;
     for (unsigned i = 0; i < BOARD_WIDTH; i++)
         delete board[i];
     delete board;
 }
 
 void Game::setupNextPiece() {
+    if (currPiece == nullptr) currPiece = new Piece();
+    if (nextPiece == nullptr) nextPiece = new Piece();
+
     // change nextPiece to currPiece
     currPiece->copy(*nextPiece);
     currPiece->setX(BOARD_WIDTH / 2 + PIECE_OFFSET_X);
     currPiece->setY(PIECE_OFFSET_Y);
 
+    std::cout << __LINE__ << std::endl;
     // get a new nextPiece
     nextPiece = new Piece();
+    std::cout << __LINE__ << std::endl;
     nextPiece->setX(NEXTPIECE_X);
     nextPiece->setY(NEXTPIECE_Y);
 }
