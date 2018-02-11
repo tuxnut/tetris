@@ -2,7 +2,7 @@
 #include "./view.h"
 #include "./model.h"
 
-int main(int argc, char **argv) {
+int main() {
     View v;
     Model m;
     Game game(&m, v);

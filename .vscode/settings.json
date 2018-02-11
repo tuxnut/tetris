@@ -3,7 +3,7 @@
         "javascript": "node",
         "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
         "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
-        "cpp": "cd $dir && g++ -W -std=c++11 *.cpp -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -o main && $dirmain",
+        "cpp": "cd $dir && g++ -W -std=c++11 *.cpp -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -o tetris && $dirtetris",
         "objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
         "php": "php",
         "python": "python",

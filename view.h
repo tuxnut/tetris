@@ -25,7 +25,7 @@ class View {
     void drawText(int px, int py, std::string text);
     void drawBoard(int **board);
     void drawPause();
-    void drawHighscore(const std::vector<Highscore> &hs, int place);
+    void drawHighscore(const std::vector<Highscore> &hs, unsigned int place);
     void drawPlayerNameOnHighscore(int place, std::string name);
     void drawMenu(int currSelection, int musicChoice, int soundChoice);
 };

@@ -8,7 +8,7 @@
             "type": "shell",
             "command": "g++",
             "args": [
-                "-W -std=c++11 *.cpp -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -o main"
+                "-g -W -Wall -std=c++11 *.cpp -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -o tetris"
             ],
             "group": {
                 "kind": "build",
@@ -18,7 +18,7 @@
         {
             "label": "run tetris",
             "type": "shell",
-            "command": "./main",
+            "command": "./tetris",
             "group": {
                 "kind": "test",
                 "isDefault": true

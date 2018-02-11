@@ -78,7 +78,7 @@ void View::drawPause() {
     drawText(TEXT_PAUSE_X, TEXT_PAUSE_Y, "PAUSE");
 }
 
-void View::drawHighscore(const std::vector<Highscore> &hs, int place) {
+void View::drawHighscore(const std::vector<Highscore> &hs, unsigned int place) {
     window->clear(sf::Color::White);
 
     int rowSize = (WINDOW_WIDTH - 2 * PADDING) / TILE_SIZE;
@@ -91,7 +91,7 @@ void View::drawHighscore(const std::vector<Highscore> &hs, int place) {
         drawTile(PADDING, PADDING + i * TILE_SIZE, BLACK);
         drawTile(WINDOW_WIDTH - PADDING - TILE_SIZE, PADDING + i * TILE_SIZE, BLACK);
     }
-    for (int i = 0; i < hs.size(); i++) {
+    for (size_t i = 0; i < hs.size(); i++) {
         std::string name = std::to_string(hs[i].ladder) + ". ";
         name += (place == i + 1) ? "" : hs[i].player;
         std::string points = std::to_string(hs[i].score);

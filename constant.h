@@ -55,41 +55,47 @@ enum Music { MUSIC_A, MUSIC_A2, MUSIC_B, SCORE };
 enum GameState { MENU, PLAYING, PAUSED, HIGHSCORE, QUITING };
 
 inline static int TileToInt(enum Tile color) {
-    switch(color) {
-    D_BLUE:
+    switch (color) {
+    case D_BLUE:
         return 0;
-    PURPLE:
+    case PURPLE:
         return 1;
-    RED:
+    case RED:
         return 2;
-    GREEN:
+    case GREEN:
         return 3;
-    YELLOW:
+    case YELLOW:
         return 4;
-    L_BLUE:
+    case L_BLUE:
         return 5;
-    ORANGE:
+    case ORANGE:
         return 6;
+    case BLACK:
+        return 7;
     }
+    return static_cast<int>(color);
 }
 
 inline static enum Tile IntToTile(int color) {
     switch(color) {
-    D_BLUE:
+    case D_BLUE:
         return D_BLUE;
-    PURPLE:
+    case PURPLE:
         return PURPLE;
-    RED:
+    case RED:
         return RED;
-    GREEN:
+    case GREEN:
         return GREEN;
-    YELLOW:
+    case YELLOW:
         return YELLOW;
-    L_BLUE:
+    case L_BLUE:
         return L_BLUE;
-    ORANGE:
+    case ORANGE:
         return ORANGE;
+    case BLACK:
+        return BLACK;
     }
+    return static_cast<Tile>(color);
 }
 
 const int shape[NB_PIECES][NB_VARIATIONS][SIZE_PIECE_SHAPE][SIZE_PIECE_SHAPE] =
@@ -136,51 +142,51 @@ typedef struct highscore {
     int score;
 } Highscore;
 
-static void DisplayShape(int k, int v) {
-    for(unsigned i = 0; i < SIZE_PIECE_SHAPE; i++) {
-        for(unsigned j = 0; j < SIZE_PIECE_SHAPE; j++) {
-            std::cout << shape[k][v][i][j] << "\t";
-        }
-        std::cout << std::endl;
-    }
-}
+// static void DisplayShape(int k, int v) {
+//     for(unsigned i = 0; i < SIZE_PIECE_SHAPE; i++) {
+//         for(unsigned j = 0; j < SIZE_PIECE_SHAPE; j++) {
+//             std::cout << shape[k][v][i][j] << "\t";
+//         }
+//         std::cout << std::endl;
+//     }
+// }
 
-static void DisplayHighscores() {
-    std::ifstream ifs("./highscore.dat");
+// static void DisplayHighscores() {
+//     std::ifstream ifs("./highscore.dat");
 
-    if (!ifs.is_open()) {
-        std::cout << "Could not open highscores file" << std::endl;
-        return;
-    }
+//     if (!ifs.is_open()) {
+//         std::cout << "Could not open highscores file" << std::endl;
+//         return;
+//     }
 
-    ifs.seekg(0, ifs.end);
-    int length = ifs.tellg();
-    ifs.seekg(0, ifs.beg);
+//     ifs.seekg(0, ifs.end);
+//     int length = ifs.tellg();
+//     ifs.seekg(0, ifs.beg);
 
-    int nbHighscores = length / sizeof(Highscore);
+//     int nbHighscores = length / sizeof(Highscore);
 
-    for(int i = 0; i < nbHighscores; i++) {
-        Highscore high;
-        ifs.read((char *)&high, sizeof(Highscore));
-        std::cout << high.ladder << "\t";
-        std::cout << high.player << "\t";
-        std::cout << high.score << std::endl;
-    }
-    ifs.close();
-}
+//     for(int i = 0; i < nbHighscores; i++) {
+//         Highscore high;
+//         ifs.read((char *)&high, sizeof(Highscore));
+//         std::cout << high.ladder << "\t";
+//         std::cout << high.player << "\t";
+//         std::cout << high.score << std::endl;
+//     }
+//     ifs.close();
+// }
 
-static void ResetHighscores() {
-    std::ofstream ofs("./highscore.dat", std::ios::binary);
+// static void ResetHighscores() {
+//     std::ofstream ofs("./highscore.dat", std::ios::binary);
 
-    for(unsigned i = 0; i < 5; i++) {
-        Highscore hs;
-        hs.ladder = i + 1;
-        strcpy(hs.player, "Unknown");
-        hs.score = 0;
+//     for(unsigned i = 0; i < 5; i++) {
+//         Highscore hs;
+//         hs.ladder = i + 1;
+//         strcpy(hs.player, "Unknown");
+//         hs.score = 0;
 
-        ofs.write((char *)&hs, sizeof(Highscore));
-    }
-    ofs.close();
-}
+//         ofs.write((char *)&hs, sizeof(Highscore));
+//     }
+//     ofs.close();
+// }
 
 #endif
