@@ -104,3 +104,42 @@ void View::drawHighscore(const std::vector<Highscore> &hs, int place) {
 void View::drawPlayerNameOnHighscore(int place, std::string name) {
     drawText(BOARD_X + 50 + 14, PADDING + 2 * place * TILE_SIZE, name);
 }
+
+void View::drawMenu(int currSelection) {
+    window->clear(sf::Color::White);
+
+    int rowSize = (WINDOW_WIDTH - 2 * PADDING) / TILE_SIZE - 4;
+    int colSize = (WINDOW_HEIGHT - 2 * PADDING) / TILE_SIZE;
+    for(int i = 0; i < rowSize; i++) {
+        drawTile(PADDING + (i + 2) * TILE_SIZE, PADDING, BLACK);
+        drawTile(PADDING + (i + 2) * TILE_SIZE, WINDOW_HEIGHT - PADDING - TILE_SIZE, BLACK);
+    }
+    for(int i = 0; i < colSize; i++) {
+        drawTile(PADDING + 2 * TILE_SIZE, PADDING + i * TILE_SIZE, BLACK);
+        drawTile(WINDOW_WIDTH - PADDING - 3 * TILE_SIZE, PADDING + i * TILE_SIZE, BLACK);
+    }
+
+    drawText(WINDOW_WIDTH / 2 - 17, PADDING + 3 * TILE_SIZE, "PLAY");
+    drawText(WINDOW_WIDTH / 2 - 42, PADDING + 7 * TILE_SIZE, "HIGHSCORES");
+    drawText(WINDOW_WIDTH / 2 - 28, PADDING + 11 * TILE_SIZE, "SOUNDS");
+    drawText(WINDOW_WIDTH / 2 - 16, PADDING + 18 * TILE_SIZE, "QUIT");
+
+    switch (currSelection) {
+    case 1:
+        drawTile(WINDOW_WIDTH / 2 - 20 - TILE_SIZE, PADDING + 3 * TILE_SIZE, IntToTile(currSelection));
+        drawTile(WINDOW_WIDTH / 2 + 20, PADDING + 3 * TILE_SIZE, IntToTile(currSelection));
+        break;
+    case 2:
+        drawTile(WINDOW_WIDTH / 2 - 45 - TILE_SIZE, PADDING + 7 * TILE_SIZE, IntToTile(currSelection));
+        drawTile(WINDOW_WIDTH / 2 + 45, PADDING + 7 * TILE_SIZE, IntToTile(currSelection));
+        break;
+    case 3:
+        drawTile(WINDOW_WIDTH / 2 - 31 - TILE_SIZE, PADDING + 11 * TILE_SIZE, IntToTile(currSelection));
+        drawTile(WINDOW_WIDTH / 2 + 31, PADDING + 11 * TILE_SIZE, IntToTile(currSelection));
+        break;
+    case 4:
+        drawTile(WINDOW_WIDTH / 2 - 19 - TILE_SIZE, PADDING + 18 * TILE_SIZE, IntToTile(currSelection));
+        drawTile(WINDOW_WIDTH / 2 + 19, PADDING + 18 * TILE_SIZE, IntToTile(currSelection));
+        break;
+    }
+}

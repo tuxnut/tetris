@@ -27,7 +27,8 @@ Game::Game(Model *m, View &v) : view(v) {
     nbLines = 0;
     level = 0;
     waitTimer = WAIT_TIME;
-    state = HIGHSCORE;
+    state = MENU;
+    menuSelection = 1;
 }
 
 Game::~Game() {
@@ -167,7 +168,7 @@ void Game::displayHighscore(sf::RenderWindow *window) {
     std::vector<Highscore> hs = model->loadHighscores();
 
     if (hs.size() == 0) {
-        state = PLAYING;
+        state = MENU;
         return;
     }
 
@@ -193,12 +194,12 @@ void Game::displayHighscore(sf::RenderWindow *window) {
             if (event.key.code == sf::Keyboard::Return) {
                 if (place != -1 && !playername.empty()) {
                     model->writeHighscores(hs, playername, place);
-                    state = PLAYING;
+                    state = MENU;
                     setupNextPiece();
                     return;
                 }
             } else if (event.key.code == sf::Keyboard::Escape) {
-                state = PLAYING;
+                state = MENU;
                 setupNextPiece();
                 return;
             }
@@ -208,7 +209,7 @@ void Game::displayHighscore(sf::RenderWindow *window) {
 
 void Game::displayMenu(sf::RenderWindow *window) {
     window->clear(sf::Color::White);
-    // view->drawMenu();
+    view.drawMenu(menuSelection);
     window->display();
 
     sf::Event event;
@@ -216,6 +217,20 @@ void Game::displayMenu(sf::RenderWindow *window) {
         if (event.type == sf::Event::Closed) {
             state = QUITING;
             return;
+        } else if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Down)
+                menuSelection = (menuSelection + 1  > 4) ? 1 : menuSelection + 1;
+            else if (event.key.code == sf::Keyboard::Up)
+                menuSelection = (menuSelection - 1  < 1) ? 4 : menuSelection - 1;
+            else if (event.key.code == sf::Keyboard::Return) {
+                if (menuSelection == 1)
+                    state = PLAYING;
+                else if (menuSelection == 3)
+                    state = HIGHSCORE;
+                else if (menuSelection == 4)
+                    state = QUITING;
+                return;
+            }
         }
     }
 }

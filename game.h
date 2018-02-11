@@ -25,6 +25,7 @@ class Game {
     int level;
     int nbPiece;
     int waitTimer;
+    int menuSelection;
 
   public:
     Game(Model *m, View &v);
