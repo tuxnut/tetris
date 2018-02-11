@@ -29,6 +29,8 @@ Game::Game(Model *m, View &v) : view(v) {
     waitTimer = WAIT_TIME;
     state = MENU;
     menuSelection = 1;
+    musicChoice = 0;
+    soundChoice = 1;
 }
 
 Game::~Game() {
@@ -57,7 +59,7 @@ int Game::getNbPiece() { return nbPiece; }
 void Game::launch() {
     model->loadTiles();
     music.setLoop(true);
-    // music.play();
+    music.play();
 
     sf::RenderWindow *window = view.createWindow();
 
@@ -96,7 +98,7 @@ void Game::startGame(sf::RenderWindow *window) {
             state = QUITING;
             return;
         }
-        if (event.type == sf::Event::KeyPressed)
+        if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Return && canRotate()) {
                 playSound(ROTATE);
                 currPiece->rotate();
@@ -118,6 +120,7 @@ void Game::startGame(sf::RenderWindow *window) {
                 state = QUITING;
                 return;
             }
+        }
     }
 
     auto elapsed = timer.getElapsedTime().asMilliseconds();
@@ -147,6 +150,8 @@ void Game::startGame(sf::RenderWindow *window) {
 void Game::pauseGame(sf::RenderWindow *window) {
     view.drawPause();
     window->display();
+    music.pause();
+
     sf::Event event;
     while (window->waitEvent(event)) {
         if (event.type == sf::Event::Closed) {
@@ -154,9 +159,11 @@ void Game::pauseGame(sf::RenderWindow *window) {
             return;
         } else if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Space) {
+                music.play();
                 state = PLAYING;
                 break;
             } else if (event.key.code == sf::Keyboard::Escape) {
+                music.play();
                 state = QUITING;
                 break;
             }
@@ -209,7 +216,7 @@ void Game::displayHighscore(sf::RenderWindow *window) {
 
 void Game::displayMenu(sf::RenderWindow *window) {
     window->clear(sf::Color::White);
-    view.drawMenu(menuSelection);
+    view.drawMenu(menuSelection, musicChoice, soundChoice);
     window->display();
 
     sf::Event event;
@@ -219,15 +226,40 @@ void Game::displayMenu(sf::RenderWindow *window) {
             return;
         } else if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Down)
-                menuSelection = (menuSelection + 1  > 4) ? 1 : menuSelection + 1;
+                menuSelection = (menuSelection + 1  > 5) ? 1 : menuSelection + 1;
             else if (event.key.code == sf::Keyboard::Up)
-                menuSelection = (menuSelection - 1  < 1) ? 4 : menuSelection - 1;
+                menuSelection = (menuSelection - 1  < 1) ? 5 : menuSelection - 1;
+            else if (event.key.code == sf::Keyboard::Right && menuSelection == 3) {
+                musicChoice++;
+                if (musicChoice < 3) {
+                    model->loadMusic(&music, static_cast<Music>(musicChoice));
+                    music.play();
+                } else {
+                    musicChoice = 3;
+                    music.stop();
+                }
+            }
+            else if (event.key.code == sf::Keyboard::Left && menuSelection == 3) {
+                musicChoice--;
+                if (musicChoice >= 0) {
+                    model->loadMusic(&music, static_cast<Music>(musicChoice));
+                    music.play();
+                } else {
+                    musicChoice = 0;
+                }
+            }
+            else if (event.key.code == sf::Keyboard::Right && menuSelection == 4) {
+                soundChoice = 1;
+            }
+            else if (event.key.code == sf::Keyboard::Left && menuSelection == 4) {
+                soundChoice = 0;
+            }
             else if (event.key.code == sf::Keyboard::Return) {
                 if (menuSelection == 1)
                     state = PLAYING;
-                else if (menuSelection == 3)
+                else if (menuSelection == 2)
                     state = HIGHSCORE;
-                else if (menuSelection == 4)
+                else if (menuSelection == 5)
                     state = QUITING;
                 return;
             }
@@ -355,13 +387,15 @@ void Game::playSound(enum Sound s) {
     // while(sound.getStatus() == sf::Sound::Playing) {
     //     sound.
     //  }
-    sound.setBuffer(buffers[s]);
-    if (s == MOVE)
-        sound.setPitch(GetRandom(1.f, 1.5f));
-    else
-        sound.setPitch(1);
+    if (soundChoice == 1) {
+        sound.setBuffer(buffers[s]);
+        if (s == MOVE)
+            sound.setPitch(GetRandom(1.f, 1.5f));
+        else
+            sound.setPitch(1);
 
-    sound.play();
+        sound.play();
+    }
 }
 
 bool Game::canRotate() {

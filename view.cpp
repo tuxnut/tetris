@@ -105,7 +105,7 @@ void View::drawPlayerNameOnHighscore(int place, std::string name) {
     drawText(BOARD_X + 50 + 14, PADDING + 2 * place * TILE_SIZE, name);
 }
 
-void View::drawMenu(int currSelection) {
+void View::drawMenu(int currSelection, int musicChoice, int soundChoice) {
     window->clear(sf::Color::White);
 
     int rowSize = (WINDOW_WIDTH - 2 * PADDING) / TILE_SIZE - 4;
@@ -120,8 +120,9 @@ void View::drawMenu(int currSelection) {
     }
 
     drawText(WINDOW_WIDTH / 2 - 17, PADDING + 3 * TILE_SIZE, "PLAY");
-    drawText(WINDOW_WIDTH / 2 - 42, PADDING + 7 * TILE_SIZE, "HIGHSCORES");
-    drawText(WINDOW_WIDTH / 2 - 28, PADDING + 11 * TILE_SIZE, "SOUNDS");
+    drawText(WINDOW_WIDTH / 2 - 42, PADDING + 6.5 * TILE_SIZE, "HIGHSCORES");
+    drawText(WINDOW_WIDTH / 2 - 21, PADDING + 10 * TILE_SIZE, "MUSIC");
+    drawText(WINDOW_WIDTH / 2 - 23, PADDING + 13.5 * TILE_SIZE, "SOUND");
     drawText(WINDOW_WIDTH / 2 - 16, PADDING + 18 * TILE_SIZE, "QUIT");
 
     switch (currSelection) {
@@ -130,14 +131,26 @@ void View::drawMenu(int currSelection) {
         drawTile(WINDOW_WIDTH / 2 + 20, PADDING + 3 * TILE_SIZE, IntToTile(currSelection));
         break;
     case 2:
-        drawTile(WINDOW_WIDTH / 2 - 45 - TILE_SIZE, PADDING + 7 * TILE_SIZE, IntToTile(currSelection));
-        drawTile(WINDOW_WIDTH / 2 + 45, PADDING + 7 * TILE_SIZE, IntToTile(currSelection));
+        drawTile(WINDOW_WIDTH / 2 - 45 - TILE_SIZE, PADDING + 6.5 * TILE_SIZE, IntToTile(currSelection));
+        drawTile(WINDOW_WIDTH / 2 + 45, PADDING + 6.5 * TILE_SIZE, IntToTile(currSelection));
         break;
     case 3:
-        drawTile(WINDOW_WIDTH / 2 - 31 - TILE_SIZE, PADDING + 11 * TILE_SIZE, IntToTile(currSelection));
-        drawTile(WINDOW_WIDTH / 2 + 31, PADDING + 11 * TILE_SIZE, IntToTile(currSelection));
+        drawTile(WINDOW_WIDTH / 2 - 24 - TILE_SIZE, PADDING + 10 * TILE_SIZE, IntToTile(currSelection));
+        drawTile(WINDOW_WIDTH / 2 + 24, PADDING + 10 * TILE_SIZE, IntToTile(currSelection));
+        drawText(WINDOW_WIDTH / 2 - 36, PADDING + 11 * TILE_SIZE, "A");
+        drawText(WINDOW_WIDTH / 2 - 12, PADDING + 11 * TILE_SIZE, "B");
+        drawText(WINDOW_WIDTH / 2 + 12, PADDING + 11 * TILE_SIZE, "C");
+        drawText(WINDOW_WIDTH / 2 + 36, PADDING + 11 * TILE_SIZE, "D");
+        drawTile(WINDOW_WIDTH / 2 - 39 + 24 * musicChoice, PADDING + 12 * TILE_SIZE + 2, IntToTile(currSelection));
         break;
     case 4:
+        drawTile(WINDOW_WIDTH / 2 - 26 - TILE_SIZE, PADDING + 13.5 * TILE_SIZE, IntToTile(currSelection));
+        drawTile(WINDOW_WIDTH / 2 + 26, PADDING + 13.5 * TILE_SIZE, IntToTile(currSelection));
+        drawText(WINDOW_WIDTH / 2 - 12, PADDING + 14.5 * TILE_SIZE, "N");
+        drawText(WINDOW_WIDTH / 2 + 12, PADDING + 14.5 * TILE_SIZE, "Y");
+        drawTile(WINDOW_WIDTH / 2 - 15 + 24 * soundChoice, PADDING + 15.5 * TILE_SIZE + 2, IntToTile(currSelection));
+        break;
+    case 5:
         drawTile(WINDOW_WIDTH / 2 - 19 - TILE_SIZE, PADDING + 18 * TILE_SIZE, IntToTile(currSelection));
         drawTile(WINDOW_WIDTH / 2 + 19, PADDING + 18 * TILE_SIZE, IntToTile(currSelection));
         break;

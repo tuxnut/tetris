@@ -8,6 +8,10 @@ void Model::loadMusic(sf::Music *music, enum Music m) {
         if (!music->openFromFile("./res/music-A.ogg"))
             std::cout << "Could not open music file" << std::endl;
         break;
+    case MUSIC_A2:
+        if (!music->openFromFile("./res/music-A-2.ogg"))
+            std::cout << "Could not open music file" << std::endl;
+        break;
     case MUSIC_B:
         if (!music->openFromFile("./res/music-B.ogg"))
             std::cout << "Could not open music file" << std::endl;
@@ -29,7 +33,7 @@ sf::SoundBuffer Model::loadSound(enum Sound sound) {
         sb.loadFromFile("./res/pauline.ogg");
         break;
     case ROTATE:
-        sb.loadFromFile("./res/move.ogg");
+        sb.loadFromFile("./res/rotate.ogg");
         break;
     case TETRIS:
         sb.loadFromFile("./res/tetris.ogg");

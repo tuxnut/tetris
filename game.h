@@ -9,7 +9,7 @@ class View;
 class Model;
 
 class Game {
-  private:
+    private:
     enum GameState state;
     View &view;
     Model *model;
@@ -26,8 +26,10 @@ class Game {
     int nbPiece;
     int waitTimer;
     int menuSelection;
+    int musicChoice;
+    int soundChoice;
 
-  public:
+    public:
     Game(Model *m, View &v);
     ~Game();
     static int GetRandom(int inf, int sup);

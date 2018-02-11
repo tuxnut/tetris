@@ -27,7 +27,7 @@ class View {
     void drawPause();
     void drawHighscore(const std::vector<Highscore> &hs, int place);
     void drawPlayerNameOnHighscore(int place, std::string name);
-    void drawMenu(int currSelection);
+    void drawMenu(int currSelection, int musicChoice, int soundChoice);
 };
 
 #endif

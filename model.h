@@ -8,7 +8,7 @@
 class Model {
     sf::Texture tiles;
 
-  public:
+    public:
     // Model();
     void loadTiles();
     void loadMusic(sf::Music *music, enum Music m);

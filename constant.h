@@ -50,7 +50,7 @@ enum Sound {
     LEVELUP
 };
 
-enum Music { MUSIC_A, MUSIC_B, SCORE };
+enum Music { MUSIC_A, MUSIC_A2, MUSIC_B, SCORE };
 
 enum GameState { MENU, PLAYING, PAUSED, HIGHSCORE, QUITING };
 
